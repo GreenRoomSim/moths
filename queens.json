@@ -178,7 +178,7 @@
     { "name": "Daya Betty",                                        "image": "daya_betty.webp",                                        "seasons": ["US S14", "US AS10"] },
     { "name": "Lady Camden",                                       "image": "lady_camden.webp",                                       "seasons": ["US S14"] },
     { "name": "Willow Pill",                                       "image": "willow_pill.webp",                                       "seasons": ["US S14"] },
-    { "name": "Irene The Alien",                                   "image": "irene_the_alien.webp",                                   "seasons": ["US S15"] },
+    { "name": "Irene The Alien",                                   "image": "irene_the_alien.webp",                                   "seasons": ["US S15", "US AS10"] },
     { "name": "Princess Poppy",                                    "image": "princess_poppy.webp",                                    "seasons": ["US S15"] },
     { "name": "Sugar",                                             "image": "sugar.webp",                                             "seasons": ["US S15"] },
     { "name": "Amethyst",                                          "image": "amethyst.webp",                                          "seasons": ["US S15"] },
