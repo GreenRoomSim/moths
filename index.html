@@ -293,6 +293,8 @@
             <h3>v1.6.0 - Update</h3>
             <ul>
               <li>Added Season Formats</li>
+              <li>Added Lip Sync fatigue: hitting 4 bottoms will get you the chop</li>
+              <li>Finale winner is now decided 50/50 based on points and wins instead of random lip syncs</li>
             </ul>
 
             <h3>v1.5.5.1 - Bug Fixes</h3>
@@ -1170,6 +1172,13 @@
           const e1 = rollLipEvent(); const e2 = rollLipEvent();
           let s1 = rand(1,10) + p1.stats.lipSync; if(e1.type==="words") s1-=99; if(e1.type==="fall") s1-=2; if(e1.type==="reveal") s1+=2;
           let s2 = rand(1,10) + p2.stats.lipSync; if(e2.type==="words") s2-=99; if(e2.type==="fall") s2-=2; if(e2.type==="reveal") s2+=2;
+          
+          // Lip Sync Fatigue: Queens in their 4th bottom 2 (or more) automatically lose in regular seasons
+          if (state.seasonFormat === "regular") {
+              if (p1.record.BTM2 >= 4 && p2.record.BTM2 < 4) s1 = -999;
+              else if (p2.record.BTM2 >= 4 && p1.record.BTM2 < 4) s2 = -999;
+          }
+
           let winner = s1 >= s2 ? {queen: p1, event: e1} : {queen: p2, event: e2};
           let loser = s1 >= s2 ? {queen: p2, event: e2} : {queen: p1, event: e1};
           data.lipSync = { song: pick(lipSongs), performances: [{queen: p1, event: e1}, {queen: p2, event: e2}], winner, loser, s1, s2 };
@@ -1206,7 +1215,7 @@
           const s1 = data.lipSync.s1;
           const s2 = data.lipSync.s2;
           
-          let isDoubleShantay = (s1 >= 13 && s2 >= 13 && Math.random() < 0.05); 
+          let isDoubleShantay = (s1 >= 13 && s2 >= 13 && Math.random() < 0.1); 
           let isDoubleSashay = (s1 <= 7 && s2 <= 7 && Math.random() < 0.02 && activeQueens().length > (state.finaleFormat === "top3" ? 4 : 5));
 
           if (state.seasonFormat === "all-stars-legacy") {
@@ -1396,9 +1405,19 @@
     });
 
     function makeMatch(q1, q2) {
-      const b1 = rand(1, 10) + (trackScore(q1) * 0.4);
-      const b2 = rand(1, 10) + (trackScore(q2) * 0.4);
-      return b1 >= b2 ? {winner: q1, loser: q2} : {winner: q2, loser: q1};
+      // Calculate a composite score based 50% on points and 50% on wins
+      // trackScore ranges ~20-50. Wins range ~0-5. 
+      // Multiplying wins by 10 puts them on the same scale, achieving a 50/50 balance.
+      let power1 = trackScore(q1) + (q1.record.WIN * 10);
+      let power2 = trackScore(q2) + (q2.record.WIN * 10);
+      
+      // Small tie-breaker
+      if (power1 === power2) {
+          power1 += Math.random();
+          power2 += Math.random();
+      }
+      
+      return power1 >= power2 ? {winner: q1, loser: q2} : {winner: q2, loser: q1};
     }
 
     function startFinale() {
