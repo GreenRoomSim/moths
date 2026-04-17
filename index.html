@@ -153,7 +153,7 @@
     .tab-content.active { display: block;
       animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);
-    } to { opacity: 1; transform: translateY(0); } }
+      } to { opacity: 1; transform: translateY(0); } }
 
     /* Modern Grid for Season Buttons */
     .season-grid { display: grid;
@@ -284,13 +284,12 @@
   <div class="app">
     <div class="hero">
       <h1 class="title">Greenroom Drag Race Simulator</h1>
-      <p class="subtitle">Release v2.0.0 - Last Updated 16/4/26</p>
+      <p class="subtitle">Release v2.0.0 - Last Updated 17/4/26</p>
       
       <div class="button-row" style="margin-top: 16px;">
         <button id="preDefBtn" class="primary" style="padding: 8px 16px; font-size: 14px;">Pre-Defined Casts</button>
         <button id="patchNotesBtn" class="secondary" style="padding: 8px 16px; font-size: 14px;">View Patch Notes</button>
-        <button id="suggestBtn" class="secondary" style="padding: 8px 16px; font-size: 14px;">Suggest 
-        a Feature / Report Bug</button>
+        <button id="suggestBtn" class="secondary" style="padding: 8px 16px; font-size: 14px;">Suggest a Feature / Report Bug</button>
       </div>
     </div>
 
@@ -301,8 +300,7 @@
           <button id="closePreDefBtn" class="ghost" style="padding: 6px 12px;">Close</button>
         </div>
         <div class="panel-body">
-          <p class="subtle" style="margin-bottom: 
-          20px;">Selecting a season will replace your current cast with the queens from that season.</p>
+          <p class="subtle" style="margin-bottom: 20px;">Selecting a season will replace your current cast with the queens from that season.</p>
           
           <div class="tabs-nav">
             <button class="tab-btn active" data-target="tab-us">US Seasons</button>
@@ -310,27 +308,23 @@
             <button class="tab-btn" data-target="tab-uk">UK Seasons</button>
           </div>
 
-         
          <div id="tab-us" class="tab-content active">
             <div class="season-grid">
               <button class="season-btn predef-btn" data-season="US S1">S1</button>
               <button class="season-btn predef-btn" data-season="US S2">S2</button>
               <button class="season-btn predef-btn" data-season="US S3">S3</button>
               <button class="season-btn predef-btn" data-season="US S4">S4</button>
-           
               <button class="season-btn predef-btn" data-season="US S5">S5</button>
               <button class="season-btn predef-btn" data-season="US S6">S6</button>
               <button class="season-btn predef-btn" data-season="US S7">S7</button>
               <button class="season-btn predef-btn" data-season="US S8">S8</button>
               <button class="season-btn predef-btn" data-season="US S9">S9</button>
               <button class="season-btn predef-btn" data-season="US S10">S10</button>
-   
               <button class="season-btn predef-btn" data-season="US S11">S11</button>
               <button class="season-btn predef-btn" data-season="US S12">S12</button>
               <button class="season-btn predef-btn" data-season="US S13">S13</button>
               <button class="season-btn predef-btn" data-season="US S14">S14</button>
               <button class="season-btn predef-btn" data-season="US S15">S15</button>
-             
               <button class="season-btn predef-btn" data-season="US S16">S16</button>
               <button class="season-btn predef-btn" data-season="US S17">S17</button>
               <button class="season-btn predef-btn" data-season="US S18">S18</button>
@@ -339,14 +333,12 @@
 
           <div id="tab-as" class="tab-content">
             <div class="season-grid">
-            
               <button class="season-btn predef-btn" data-season="US AS1">AS1</button>
               <button class="season-btn predef-btn" data-season="US AS2">AS2</button>
               <button class="season-btn predef-btn" data-season="US AS3">AS3</button>
               <button class="season-btn predef-btn" data-season="US AS4">AS4</button>
               <button class="season-btn predef-btn" data-season="US AS5">AS5</button>
               <button class="season-btn predef-btn" data-season="US AS6">AS6</button>
-    
               <button class="season-btn predef-btn" data-season="US AS7">AS7</button>
               <button class="season-btn predef-btn" data-season="US AS8">AS8</button>
               <button class="season-btn predef-btn" data-season="US AS9">AS9</button>
@@ -354,14 +346,12 @@
             </div>
           </div>
 
-          
           <div id="tab-uk" class="tab-content">
             <div class="season-grid">
               <button class="season-btn predef-btn" data-season="UK S1">UK1</button>
               <button class="season-btn predef-btn" data-season="UK S2">UK2</button>
               <button class="season-btn predef-btn" data-season="UK S3">UK3</button>
               <button class="season-btn predef-btn" data-season="UK S4">UK4</button>
-             
               <button class="season-btn predef-btn" data-season="UK S5">UK5</button>
               <button class="season-btn predef-btn" data-season="UK S6">UK6</button>
               <button class="season-btn predef-btn" data-season="UK S7">UK7</button>
@@ -373,9 +363,7 @@
 
     <div id="patchNotesModal" class="modal hidden">
       <div class="modal-content panel">
-    
-        <div class="panel-header" style="display: flex; justify-content: space-between;
-        align-items: center;">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
           <h2>Patch Notes</h2>
           <button id="closePatchNotesBtn" class="ghost" style="padding: 6px 12px;">Close</button>
         </div>
@@ -383,8 +371,7 @@
           <div class="patch-notes-content">
             <h3>v1.9.0 - Update</h3>
             <ul>
-              <li>Added the mid-season LaLaPaRuza Smackdown 
-              (Toggleable in setup).</li>
+              <li>Added the mid-season LaLaPaRuza Smackdown (Toggleable in setup).</li>
               <li>Changed Minimum Cast to 8</li>
             </ul>
 
@@ -392,15 +379,13 @@
             <ul>
               <li>Changed Girl Group Challenge Episode Cycle.</li>
               <li>Added Team Names and new performance screens.</li>
-   
               <li>Added Season Dimention, With Non-Elimination Episode & Double Wins.</li>
               <li>Fixed some issues with Late & Early Season Progression.</li>
             </ul>
 
             <h3>v1.7.0 - Update</h3>
             <ul>
-              <li>Added "Choose Output" button to rig placements 
-              during Judging and Lip Syncs.</li>
+              <li>Added "Choose Output" button to rig placements during Judging and Lip Syncs.</li>
               <li>Added ability to rig Finale placements.</li>
             </ul>
 
@@ -409,7 +394,6 @@
               <li>Fixed Lip Sync Fatigue Issues</li>
             </ul>
 
-         
             <h3>v1.6.0 - Update</h3>
             <ul>
               <li>Added Season Formats</li>
@@ -417,7 +401,6 @@
               <li>Finale winner is now decided on a fairer basis</li>
             </ul>
 
-           
             <h3>v1.5.5.1 - Bug Fixes</h3>
             <ul>
               <li>Fixed Some Unfair Queen Stats</li>        
@@ -425,7 +408,6 @@
             
             <h3>v1.5.5 - Mini-Update</h3>
             <ul>
-        
               <li>Changed Queen Loading System.</li>
               <li>Queens Stats are No Longer Randomized.</li>             
             </ul>
@@ -433,7 +415,6 @@
             <h3>v1.5.0 - Update</h3>
             <ul>
               <li>Added 'Pre-Defined Casts'.</li>
-     
               <li>Fixed issues with some pictures.</li>
               <li>Added new Lip Sync Songs.</li>
             </ul>
@@ -441,7 +422,6 @@
             <h3>v1.4.0 - Update</h3>
             <ul>
               <li>Edited Setup Screen UI.</li>
-              
               <li>Add Real RPDR Queens Feature.</li>
               <li>Added new Lip Sync Songs.</li>
             </ul>
@@ -449,8 +429,7 @@
             <h3>v1.3.0 - Update</h3>
             <ul>
               <li>Added Premiere Format customization options.</li>
-              <li>Added Top 2 Premiere logic (Top 2 Lip 
-              Sync for the win).</li>
+              <li>Added Top 2 Premiere logic (Top 2 Lip Sync for the win).</li>
               <li>Added Regular Premiere (No Elimination) logic.</li>
             </ul>
 
@@ -459,13 +438,11 @@
               <li>Increased maximum cast size to 16 queens.</li>
             </ul>
         
-            
             <h3>v1.2.0 - Update</h3>
             <ul>
               <li>Added Patch Notes modal to the home screen.</li>
               <li>Added a "Suggest" button to easily submit Google Forms ideas.</li>
               <li>Added new mini challenges.</li>
-         
             </ul>
             
             <h3>v1.1.1 - Bug Fix / v1.1.0 - Update</h3>
@@ -481,8 +458,7 @@
 
     <div id="rigModal" class="modal hidden">
       <div class="modal-content panel">
-        <div class="panel-header" style="display: flex;
-        justify-content: space-between; align-items: center;">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
           <h2>Riggory Panel</h2>
           <button id="closeRigBtn" class="ghost" style="padding: 6px 12px;">Close</button>
         </div>
@@ -490,7 +466,6 @@
           <p class="subtle">Choose the outcome you'd like to force for this screen.</p>
           <div id="rigContent" class="form-grid"></div>
           <div class="button-row" style="margin-top: 16px;">
-         
             <button id="saveRigBtn" class="primary">Save Changes</button>
           </div>
         </div>
@@ -499,8 +474,7 @@
 
     <div id="customQueenModal" class="modal hidden">
       <div class="modal-content panel">
-        <div class="panel-header" style="display: flex;
-        justify-content: space-between; align-items: center;">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
           <h2>Add Custom Queen</h2>
           <button id="closeCustomQueenBtn" class="ghost" style="padding: 6px 12px;">Close</button>
         </div>
@@ -508,21 +482,17 @@
           <label class="field">Input Queen Name<input id="queenNameInput" type="text" placeholder="Coral" /></label>
           <div class="stat-grid">
             <label class="field">Comedy<input id="comedyInput" type="number" min="1" max="10" value="5" /></label>
-     
             <label class="field">Design<input id="designInput" type="number" min="1" max="10" value="5" /></label>
             <label class="field">Performance<input id="performanceInput" type="number" min="1" max="10" value="5" /></label>
             <label class="field">Acting<input id="actingInput" type="number" min="1" max="10" value="5" /></label>
             <label class="field">Lip Sync<input id="lipSyncInput" type="number" min="1" max="10" value="5" /></label>
           </div>
           <div class="button-row">
-       
             <button id="randomizeQueenBtn" class="secondary">Randomize</button>
             <button id="addQueenBtn" class="primary">Add Queen</button>
           </div>
-          <hr style="border: 0;
-          border-top: 1px solid var(--border); margin: 12px 0;" />
-          <p class="subtle" style="margin-bottom:4px;
-          text-align:center;">Or load/save a full cast using JSON</p>
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 12px 0;" />
+          <p class="subtle" style="margin-bottom:4px; text-align:center;">Or load/save a full cast using JSON</p>
           <div class="button-row" style="justify-content:center;">
             <label for="importCastInput" class="file-btn">Import Cast</label>
             <input id="importCastInput" type="file" accept="application/json" />
@@ -533,7 +503,6 @@
     </div>
 
     <section id="setupView" class="panel">
-  
       <div class="panel-header">
         <h2>Cast Setup</h2>
         <div class="meta">Select queens from the franchise or create your own.</div>
@@ -542,61 +511,52 @@
         <div class="setup-layout">
           <div class="control-panel">
             <div class="panel-title">Add Queens</div>
-            <p class="subtle">Search for a queen, add a random one, or 
-            create your own custom drag star!</p>
+            <p class="subtle">Search for a queen, add a random one, or create your own custom drag star!</p>
             <div class="form-grid">
               
               <div class="button-row" style="margin-bottom: 8px;">
                 <button id="addRandomRealBtn" class="secondary" style="flex:1;">Add Random</button>
                 <button id="openCustomQueenBtn" class="ghost" style="flex:1;">Add Custom</button>
-           
               </div>
 
               <label class="field">Search Franchise Queens
-                <input id="realQueenSearch" type="text" placeholder="e.g.
-                Trixie Mattel..." autocomplete="off"/>
+                <input id="realQueenSearch" type="text" placeholder="e.g. Trixie Mattel..." autocomplete="off"/>
               </label>
               
               <div id="searchResults" class="search-results-grid"></div>
 
-              <hr style="border: 0;
-              border-top: 1px solid var(--border); margin: 12px 0;" />
+              <hr style="border: 0; border-top: 1px solid var(--border); margin: 12px 0;" />
 
               <label class="field" style="margin-top: 4px;">Season Format
                 <select id="seasonFormatSelect">
                   <option value="regular">Regular Season</option>
                   <option value="all-stars-legacy">All Stars (Lip Sync For Your Legacy)</option>
-             
                   <option value="all-stars-assassin">All Stars (Lip Sync Assassin)</option>
                 </select>
               </label>
               
               <label class="field">Premiere Format
                 <select id="premiereFormatSelect">
-             
                   <option value="regular">Regular Premiere</option>
                   <option value="no-elim">Regular Premiere (No Elimination)</option>
                   <option value="top2">Top 2 Premiere (Lip Sync for the Win)</option>
                 </select>
               </label>
 
-              <label 
-              class="field">Finale Format
+              <label class="field">Finale Format
                 <select id="finaleFormatSelect">
                   <option value="top4">Top 4 Finale (Lip Sync Smackdown)</option>
                   <option value="top3">Top 3 Finale</option>
                 </select>
               </label>
 
-       
-              <label class="field">LaLaPaRuza Smackdown
+               <label class="field">LaLaPaRuza Smackdown
                 <select id="lalaPaRuzaSelect">
                   <option value="enabled">Enabled (Mid-Season)</option>
                   <option value="disabled">Disabled</option>
                 </select>
               </label>
 
-     
               <button id="startBtn" class="primary" disabled>Start Season</button>
             </div>
           </div>
@@ -604,7 +564,6 @@
             <div class="cast-topbar">
               <div>
                 <div class="panel-title" style="margin-bottom:4px;">Cast Preview</div>
-        
                 <div class="subtle" id="castCountText">0 queens added</div>
               </div>
             </div>
@@ -615,7 +574,6 @@
       </div>
     </section>
 
-   
     <section id="gameView" class="panel hidden" style="margin-top:18px;">
       <div class="panel-header">
         <h2 id="gameHeader">Episode</h2>
@@ -623,8 +581,7 @@
       </div>
       <div class="panel-body">
         <div id="gameContent" class="phase-wrap"></div>
-        <div style="display:flex;
-        justify-content: space-between; align-items: flex-end; margin-top: 24px;">
+        <div style="display:flex; justify-content: space-between; align-items: flex-end; margin-top: 24px;">
             <span class="subtle" style="margin:0;" id="screenCounterText"></span>
             <div class="footer-actions" style="margin:0;">
                 <button id="rigGameBtn" class="secondary hidden">Choose Output</button>
@@ -632,7 +589,6 @@
             </div>
         </div>
       </div>
-  
     </section>
 
     <section id="finaleView" class="panel hidden" style="margin-top:18px;">
@@ -645,7 +601,6 @@
         <div class="footer-actions">
           <button id="rigFinaleBtn" class="secondary hidden">Choose Output</button>
           <button id="finaleBtn" class="primary">Next</button>
-      
         </div>
       </div>
     </section>
@@ -665,7 +620,7 @@
         }
       })
       .catch(error => console.error("Error loading queens.json:", error));
-      
+
     // Challenge Lists
     const miniChallenges = [
       { name: "Reading Challenge", req: "none" },
@@ -676,7 +631,7 @@
       { name: "Dance-Off", req: "none" },
       { name: "RuMail Guessing Game", req: "none" }
     ];
-    
+
     const maxiChallenges = [
       { name: "Talent Show", type: "Performance", once: true, req: "early" },
       { name: "Design Challenge", type: "Design", once: false, req: "not-last" },
@@ -684,14 +639,12 @@
       { name: "Girl Group Challenge", type: "Performance", once: true, req: "not-early" },
       { name: "Rusical", type: "Performance", once: true, req: "mid" },
       { name: "Snatch Game", type: "Comedy", once: true, req: "mid" },
- 
       { name: "Acting Challenge", type: "Acting", once: false, req: "mid" },
       { name: "Improv Challenge", type: "Acting", once: false, req: "mid" },
       { name: "Stand-Up Comedy / Roast", type: "Comedy", once: false, req: "late" },
       { name: "Commercial / Branding", type: "Acting", once: false, req: "late" },
       { name: "Makeover Challenge", type: "Design", once: true, req: "late" },
       { name: "Music Video", type: "Performance", once: true, req: "last" }
-  
     ];
 
     const lipSongs = [
@@ -755,7 +708,6 @@
       "Into You by Ariana Grande",
       "Problem by Ariana Grande",
       "One Last Time by Ariana Grande",
-     
       "Bang Bang by Jessie J, Ariana Grande & Trumpie Minaj",
       "Anaconda by Nicki Minaj",
       "Pound The Alarm by Nicki Minaj",
@@ -800,8 +752,7 @@
       premiereFormatSelect: document.getElementById("premiereFormatSelect"),
       lalaPaRuzaSelect: document.getElementById("lalaPaRuzaSelect"),
       startBtn: document.getElementById("startBtn"), castPreview: document.getElementById("castPreview"), castEmptyState: document.getElementById("castEmptyState"), castCountText: document.getElementById("castCountText"),
-      gameHeader: document.getElementById("gameHeader"), gameMeta: document.getElementById("gameMeta"), gameContent: document.getElementById("gameContent"), nextPhaseBtn: 
-      document.getElementById("nextPhaseBtn"), screenCounterText: document.getElementById("screenCounterText"),
+      gameHeader: document.getElementById("gameHeader"), gameMeta: document.getElementById("gameMeta"), gameContent: document.getElementById("gameContent"), nextPhaseBtn: document.getElementById("nextPhaseBtn"), screenCounterText: document.getElementById("screenCounterText"),
       finaleMeta: document.getElementById("finaleMeta"), finaleContent: document.getElementById("finaleContent"), finaleBtn: document.getElementById("finaleBtn"),
       
       preDefBtn: document.getElementById("preDefBtn"), closePreDefBtn: document.getElementById("closePreDefBtn"), preDefModal: document.getElementById("preDefModal"),
@@ -812,7 +763,6 @@
       // Rigging UI Elements
       rigGameBtn: document.getElementById("rigGameBtn"),
       rigFinaleBtn: document.getElementById("rigFinaleBtn"),
-      
       rigModal: document.getElementById("rigModal"),
       closeRigBtn: document.getElementById("closeRigBtn"),
       rigContent: document.getElementById("rigContent"),
@@ -827,7 +777,6 @@
     el.openCustomQueenBtn.addEventListener("click", () => el.customQueenModal.classList.remove("hidden"));
     el.closeCustomQueenBtn.addEventListener("click", () => el.customQueenModal.classList.add("hidden"));
     el.closeRigBtn.addEventListener("click", () => el.rigModal.classList.add("hidden"));
-    
     el.suggestBtn.addEventListener("click", () => {
       window.open("https://forms.gle/bprZzRLGFyfe9yWs6", "_blank");
     });
@@ -852,7 +801,6 @@
     
     function loadPredefCast(season) {
       if (!allRealQueens.length) return alert("Still loading queens data, please wait a moment.");
-      
       const cast = allRealQueens.filter(q => q.seasons && q.seasons.includes(season));
       if (!cast.length) return alert(`No queens found for ${season}.`);
 
@@ -865,7 +813,6 @@
           comedy: s[0] || intRand(3, 10), design: s[1] || intRand(3, 10), performance: s[2] || intRand(3, 10),
           acting: s[3] || intRand(3, 10), lip_sync: s[4] || intRand(3, 10)
         });
-    
       });
       updateSetupUI();
       el.preDefModal.classList.add("hidden");
@@ -879,8 +826,7 @@
       el.searchResults.innerHTML = results.map(q => `
         <div class="search-result-item" data-name="${escapeHtml(q.name)}" data-image="${escapeHtml(q.image)}">
           <img src="${escapeHtml(q.image)}" class="search-result-img" alt="${escapeHtml(q.name)}" />
-         
-         <span style="font-weight: 600;">${escapeHtml(q.name)}</span>
+          <span style="font-weight: 600;">${escapeHtml(q.name)}</span>
         </div>
       `).join("");
     });
@@ -912,14 +858,10 @@
       updateSetupUI();
     }
 
-    function rand(min, max) { return min + Math.random() * (max - min);
-    }
-    function intRand(min, max) { return Math.floor(rand(min, max + 1));
-    }
-    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)];
-    }
-    function clamp(value, min, max) { return Math.max(min, Math.min(max, value));
-    }
+    function rand(min, max) { return min + Math.random() * (max - min); }
+    function intRand(min, max) { return Math.floor(rand(min, max + 1)); }
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
     function escapeHtml(text) { return String(text).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;"); }
     function normalizeStat(v) { const n = parseInt(v ?? 5, 10); return clamp(Number.isFinite(n) ? n : 5, 1, 10); }
 
@@ -927,8 +869,7 @@
         if (!p) return "";
         if (p === "BTM2" || p === "BTM") return "bg-btm";
         if (p === "TOP 2") return "bg-top2";
-        if (p === "RUNNER UP" || p === "RUNNER") 
-        return "bg-runner";
+        if (p === "RUNNER UP" || p === "RUNNER") return "bg-runner";
         if (p === "WON R1") return "bg-won-r1";
         if (p === "WON R2") return "bg-won-r2";
         if (p === "WON R3") return "bg-won-r3";
@@ -937,8 +878,7 @@
 
     function randomizeQueenForm() {
       el.comedyInput.value = intRand(1, 10); el.designInput.value = intRand(1, 10); el.performanceInput.value = intRand(1, 10); el.actingInput.value = intRand(1, 10); el.lipSyncInput.value = intRand(1, 10);
-      if (!el.queenNameInput.value.trim()) el.queenNameInput.value = `Custom Queen ${state.queens.length 
-      + 1}`;
+      if (!el.queenNameInput.value.trim()) el.queenNameInput.value = `Custom Queen ${state.queens.length + 1}`;
     }
 
     function clearQueenForm() {
@@ -959,14 +899,12 @@
               ${q.image 
                 ? `<img src="${escapeHtml(q.image)}" class="queen-avatar" alt="${escapeHtml(q.name)}" />` 
                 : `<div class="queen-avatar" style="display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; color:var(--muted);">?</div>`
- 
-               }
+              }
               <div class="queen-name">${escapeHtml(q.name || `Queen ${index + 1}`)}</div>
             </div>
             <span class="pill">#${index + 1}</span>
           </div>
           <div class="queen-mini">Com ${q.comedy} • Des ${q.design} • Perf ${q.performance} • Act ${q.acting} • Lip ${q.lip_sync}</div>
-      
           <div class="tiny-actions"><button class="ghost" data-action="remove-queen" data-index="${index}">Remove</button></div>
         </div>
       `).join("");
@@ -997,10 +935,9 @@
       renderEpisode();
     }
 
-    function activeQueens() { return state.queens.filter(q => !q.eliminated);
-    }
-    function trackScore(q) { return (q.record.WIN * 5) + ((q.record.TOP2 || 0) * 4.5) + (q.record.HIGH * 4) + (q.record.SAFE * 3) + (q.record.LOW * 2) + (q.record.BTM2 * 1);
-    }
+    function activeQueens() { return state.queens.filter(q => !q.eliminated); }
+    
+    function trackScore(q) { return (q.record.WIN * 5) + ((q.record.TOP2 || 0) * 4.5) + (q.record.HIGH * 4) + (q.record.SAFE * 3) + (q.record.LOW * 2) + (q.record.BTM2 * 1); }
 
     function getMiniChallenge(epNum, remaining) {
       if (Math.random() > 0.7) return { none: true };
@@ -1024,13 +961,13 @@
       const isMid = epNum > 3 && remaining > 5; const isLate = remaining <= 6 && remaining > 4;
       const isLast = remaining === 4 || remaining === 5;
       let valid = pool.filter(c => {
+        if (c.name === "Girl Group Challenge" && state.seasonFormat !== "regular") return false;
         if (c.req === "early" && !isEarly) return false;
         if (c.req === "early-mid" && !isEarlyMid) return false;
         if (c.req === "mid" && !isMid) return false;
         if (c.req === "late" && !isLate) return false;
         if (c.req === "last" && !isLast) return false;
         if (c.req === "not-last" && isLast) return false;
-        if (c.name === "Girl Group Challenge" && state.seasonFormat !== "regular") return false;
         return true;
       });
       if (!valid.length) valid = pool.filter(c => c.req === "mid" || c.req === "late" || c.req === "not-last");
@@ -1054,8 +991,7 @@
       if(e1.type==="words") s1-=99; if(e1.type==="fall") s1-=2; if(e1.type==="reveal") s1+=2;
       let s2 = rand(1,10) + q2.stats.lipSync;
       if(e2.type==="words") s2-=99; if(e2.type==="fall") s2-=2; if(e2.type==="reveal") s2+=2;
-      let winner = s1 >= s2 ?
-      q1 : q2;
+      let winner = s1 >= s2 ? q1 : q2;
       let loser = s1 >= s2 ? q2 : q1;
       return { winner, loser, e1: {queen: q1, event: e1}, e2: {queen: q2, event: e2}, song: pick(lipSongs) };
     }
@@ -1063,6 +999,7 @@
     function prepareEpisode() {
       const actives = activeQueens();
       const n = actives.length;
+      
       // LaLaPaRuza Trigger Check
       if (state.lalaPaRuzaEnabled && n === 8 && !state.usedMaxis.includes("LaLaPaRuza")) {
           state.usedMaxis.push("LaLaPaRuza");
@@ -1090,7 +1027,6 @@
               r1Matches, r1Results,
               r2Matches, r2Results,
               r3Match, r3Result,
-   
               countsApplied: false,
               riggedOutcome: null
           };
@@ -1109,6 +1045,7 @@
         const score = rand(1, 10) + q.stats[statKey] * rand(0.8, 1.5) + rand(-1, 1);
         return { queen: q, score };
       }).sort((a, b) => b.score - a.score);
+      
       let categories = new Map();
       let winners = [], highQueens = [], pureSafe = [], savedLow = null, lowQueens = [], bottomTwo = [];
       let isGG = false;
@@ -1135,9 +1072,11 @@
           let losingTeam = scoreA > scoreB ? teamB : teamA;
           let winningName = scoreA > scoreB ? nameA : nameB;
           let losingName = scoreA > scoreB ? nameB : nameA;
+          
           losingTeam.sort((a, b) => b.score - a.score);
           winners = winningTeam.map(i => i.queen);
           winningTeam.forEach(i => categories.set(i.queen.id, "Slayed"));
+          
           let lQueens = losingTeam.map(i => i.queen);
           bottomTwo = lQueens.slice(-2);
           savedLow = lQueens.length > 2 ? lQueens[lQueens.length - 3] : null;
@@ -1159,7 +1098,6 @@
               if (idx < 2) label = "Slayed";
               else if (idx < 5) label = "Great";
               categories.set(entry.queen.id, label);
-          
           });
           let top2 = [scores[0].queen, scores[1].queen];
           let high = scores.slice(2, 5).map(s => s.queen);
@@ -1190,7 +1128,7 @@
           }
           let placedIds = [...topOne, ...asHighQueens, ...asBottomTwo, asSavedLow].filter(Boolean).map(q => q.id);
           let asPureSafe = actives.filter(q => !placedIds.includes(q.id));
-
+          
           topOne.forEach(q => categories.set(q.id, "Slayed"));
           asHighQueens.forEach(q => categories.set(q.id, "Great"));
           asBottomTwo.forEach(q => categories.set(q.id, "Flopped"));
@@ -1205,6 +1143,7 @@
               let voteFor = pick(asBottomTwo); 
               votes[voteFor.id]++;
           });
+          
           // Find max votes
           let maxVotes = 0;
           let groupChoice = [];
@@ -1217,41 +1156,40 @@
               }
           }
           let isTie = groupChoice.length > 1;
+          
           // Top All Star choice
           let topChoice = pick(asBottomTwo);
+          
           // Pick LSA
           let availableLSA = allRealQueens.filter(rq => !state.queens.some(sq => sq.name === rq.name) && rq.stats && rq.stats[4] >= 8);
           if (!availableLSA.length) availableLSA = allRealQueens.filter(rq => !state.queens.some(sq => sq.name === rq.name));
           if (!availableLSA.length) availableLSA = [{name: "Mystery Queen", image: "", stats: [5,5,5,5,10]}];
           let lsa = pick(availableLSA);
           let lsaQueenObj = {
-              name: lsa.name, image: lsa.image, stats: { lipSync: lsa.stats ?
-              lsa.stats[4] : 10 }
+              name: lsa.name, image: lsa.image, stats: { lipSync: lsa.stats ? lsa.stats[4] : 10 }
           };
+          
           state.episodeData = {
               mini, maxi, categories, scores,
               placements: { topOne, highQueens: asHighQueens, pureSafe: asPureSafe, savedLow: asSavedLow, bottomTwo: asBottomTwo, winners: [] },
               lsaData: { lsa: lsaQueenObj, topChoice, groupChoice, isTie, votes, tieBreakerNeeded: false },
               countsApplied: false, lipSync: null, elimination: null, riggedOutcome: null, tieBreakApplied: false
-       
-          };
+           };
           return;
       } else {
-          let winnerCount = (state.seasonFormat === "regular" && Math.random() < 0.05 && n >= 5) ?
-          2 : 1;
+          let winnerCount = (state.seasonFormat === "regular" && Math.random() < 0.05 && n >= 5) ? 2 : 1;
           scores.forEach((entry, idx) => {
               let label = "Okay";
               if (idx < winnerCount) label = "Slayed";
               else if (idx < Math.ceil(n * 0.25) + winnerCount - 1) label = "Great";
               else if (idx >= n - 2) label = "Flopped";
-       
               else if (idx === n - 3) label = "Bad";
               categories.set(entry.queen.id, label);
           });
+          
           winners = scores.slice(0, winnerCount).map(s => s.queen);
           bottomTwo = scores.slice(n-2, n).map(s => s.queen);
-          savedLow = n >= 6 ?
-          scores[n-3].queen : null;
+          savedLow = n >= 6 ? scores[n-3].queen : null;
 
           let placedIds = [...winners, ...bottomTwo, savedLow].filter(Boolean).map(q => q.id);
           let remainingForHigh = scores.filter(s => !placedIds.includes(s.queen.id));
@@ -1267,13 +1205,13 @@
               placements: { winners, highQueens, pureSafe, savedLow, bottomTwo },
               countsApplied: false, lipSync: null, elimination: null, riggedOutcome: null,
               isGirlGroup: true, gg: ggData
-    
           };
       } else if (state.seasonFormat === "all-stars-legacy") {
           let topTwo = [scores[0].queen, scores[1].queen];
           let asHighQueens = [];
           let asBottomTwo = [];
           let asSavedLow = null;
+          
           if (n <= 4) {
               asBottomTwo = scores.slice(2).map(s => s.queen);
           } else {
@@ -1329,13 +1267,12 @@
       el.gameHeader.textContent = `Episode ${state.episodeNumber}`;
       el.gameMeta.textContent = `${active.length} queens remaining • ${state.queens.length} in cast`;
 
-      let totalScreens = isGG ?
-      8 : (data.isLaLaPaRuza ? 8 : 7);
+      let totalScreens = isGG ? 8 : (data.isLaLaPaRuza ? 8 : 7);
       if (isAssassin) {
-          totalScreens = (data.lsaData && data.lsaData.tieBreakerNeeded) ?
-          9 : 8;
+          totalScreens = (data.lsaData && data.lsaData.tieBreakerNeeded) ? 9 : 8;
       }
       el.screenCounterText.textContent = "";
+      
       // Rig Button Toggle Logic
       el.rigGameBtn.classList.toggle("hidden", 
           (isGG && state.phase !== 4 && state.phase !== 6) ||
@@ -1343,6 +1280,7 @@
           (isAssassin && state.phase !== 3 && state.phase !== 6) ||
           (!isGG && !data.isLaLaPaRuza && !isAssassin && state.phase !== 3 && state.phase !== 5)
       );
+      
       // Phase Translator mapping specifically to handle Girl Group shifts and Assassin shifts
       let phaseTag = state.phase;
       if (isGG) {
@@ -1365,7 +1303,7 @@
               else phaseTag = 7; // Map to Recap
           }
           else if (state.phase === 9) phaseTag = 7;
-      // Map to Recap
+          // Map to Recap
       }
 
       let content = "";
@@ -1374,11 +1312,8 @@
               content = `
                 <div class="section-card" style="text-align: center; padding: 40px 24px;">
                   <div class="label-row"><span class="pill">Maxi Challenge</span></div>
-                  <h2 
-                  style="font-size: 24px; font-weight: 900; margin: 0 0 16px; color: var(--danger);">LaLaPaRuza Lip Sync Smackdown!</h2>
-                  <p class="muted">There is no mini challenge today.
-                  All 8 queens will compete in a sudden-death lip sync tournament!
-                  You must win a lip sync to be safe.</p>
+                  <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px; color: var(--danger);">LaLaPaRuza Lip Sync Smackdown!</h2>
+                  <p class="muted">There is no mini challenge today. All 8 queens will compete in a sudden-death lip sync tournament! You must win a lip sync to be safe.</p>
                 </div>
               `;
           } else if (state.phase === 2) {
@@ -1391,12 +1326,10 @@
                     ${data.r1Matches.map((m, i) => `
                       <div class="group-row">
                         <p class="muted" style="margin:0;">Lip Sync ${i+1}</p>
-                        
                         <div class="flex-center">
                           <div class="placement-card bg-safe">${escapeHtml(m.p1.name)}</div>
                           <span style="font-weight:900;">VS</span>
                           <div class="placement-card bg-safe">${escapeHtml(m.p2.name)}</div>
-                
                         </div>
                       </div>
                     `).join("")}
@@ -1413,12 +1346,10 @@
                     ${data.r1Results.map((r, i) => `
                       <div class="group-row">
                         <p class="muted" style="margin:0; font-size:12px;">Song: ${escapeHtml(r.song)}</p>
-                        
                         <div class="flex-center">
                           <div class="placement-card bg-won-r1">${escapeHtml(r.winner.name)}</div>
                         </div>
                         <p class="muted" style="font-size:12px;">${escapeHtml(r.loser.name)} lost and moves to Round 2.</p>
-               
                       </div>
                     `).join("")}
                   </div>
@@ -1434,12 +1365,10 @@
                     ${data.r2Matches.map((m, i) => `
                       <div class="group-row">
                         <p class="muted" style="margin:0;">Lip Sync ${i+1}</p>
-                        
                         <div class="flex-center">
                           <div class="placement-card bg-safe">${escapeHtml(m.p1.name)}</div>
                           <span style="font-weight:900;">VS</span>
                           <div class="placement-card bg-safe">${escapeHtml(m.p2.name)}</div>
-                
                         </div>
                       </div>
                     `).join("")}
@@ -1456,12 +1385,10 @@
                     ${data.r2Results.map((r, i) => `
                       <div class="group-row">
                         <p class="muted" style="margin:0; font-size:12px;">Song: ${escapeHtml(r.song)}</p>
-                        
                         <div class="flex-center">
                           <div class="placement-card bg-won-r2">${escapeHtml(r.winner.name)}</div>
                         </div>
                         <p class="muted" style="font-size:12px;">${escapeHtml(r.loser.name)} lost and moves to the Final Round.</p>
-              
                       </div>
                     `).join("")}
                   </div>
@@ -1472,32 +1399,26 @@
                 <div class="section-card">
                   <div class="label-row"><span class="pill">Final Round Matchup</span></div>
                   <p class="big-message" style="color:var(--danger);">The Final Lip Sync</p>
-              
                   <p class="muted">Whoever loses this lip sync will be eliminated.</p>
                   <p class="muted" style="margin-top:12px; margin-bottom:12px; font-weight:800;">Song: ${escapeHtml(data.r3Result.song)}</p>
                   <div class="flex-col-center">
                       <div class="flex-center">
-                       
                         <div class="placement-card bg-btm">${escapeHtml(data.r3Match.p1.name)}</div>
                         <span style="font-weight:900;">VS</span>
                         <div class="placement-card bg-btm">${escapeHtml(data.r3Match.p2.name)}</div>
                       </div>
                   </div>
-      
                 </div>
               `;
           } else if (state.phase === 7) {
               if (!data.countsApplied) {
-                 if (data.riggedOutcome === "w1") { data.r3Result.winner = data.r3Match.p1;
-                 data.r3Result.loser = data.r3Match.p2; }
-                 if (data.riggedOutcome === "w2") { data.r3Result.winner = data.r3Match.p2;
-                 data.r3Result.loser = data.r3Match.p1; }
+                 if (data.riggedOutcome === "w1") { data.r3Result.winner = data.r3Match.p1; data.r3Result.loser = data.r3Match.p2; }
+                 if (data.riggedOutcome === "w2") { data.r3Result.winner = data.r3Match.p2; data.r3Result.loser = data.r3Match.p1; }
 
                  const epIndex = state.episodeNumber - 1;
                  data.r1Results.forEach(r => { r.winner.record.SAFE++; r.winner.history[epIndex] = "WON R1"; });
                  data.r2Results.forEach(r => { r.winner.record.LOW++; r.winner.history[epIndex] = "WON R2"; });
-                 data.r3Result.winner.record.BTM2++;
-                 data.r3Result.winner.history[epIndex] = "WON R3";
+                 data.r3Result.winner.record.BTM2++; data.r3Result.winner.history[epIndex] = "WON R3";
 
                  let l = data.r3Result.loser;
                  l.record.ELIM++; l.eliminated = true; l.elimOrder = state.episodeNumber; l.history[epIndex] = "ELIM";
@@ -1509,16 +1430,13 @@
                   <div class="label-row"><span class="pill">Results</span></div>
                   <p class="big-message">Final Decisions</p>
                   <div class="flex-col-center">
-   
                     <div class="group-row">
                       <div class="placement-card bg-won-r3">${escapeHtml(data.r3Result.winner.name)}</div>
-                      <p class="muted">Shantay you stay.
-                      That was a close call.</p>
+                      <p class="muted">Shantay you stay. That was a close call.</p>
                     </div>
                     <div class="group-row" style="border:none;">
                       <div class="placement-card bg-elim">${escapeHtml(data.r3Result.loser.name)}</div>
                       <p class="muted">Sashay away.</p>
-      
                     </div>
                   </div>
                 </div>
@@ -1531,7 +1449,6 @@
             if (data.mini.none) {
                 content = `
                   <div class="section-card" style="text-align: center; padding: 40px 24px;">
-          
                     <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px;">There is no mini challenge today.</h2>
                     <p class="muted">Let's get straight to the main event.</p>
                   </div>
@@ -1544,7 +1461,6 @@
                     </div>
                     <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px;">${escapeHtml(data.mini.challenge)}</h2>
                     <p class="muted" style="text-align: left;">Mini challenge winners: ${data.mini.winners.map(q => `<strong>${escapeHtml(q.name)}</strong>`).join(", ")}</p>
-       
                   </div>
                 `;
             }
@@ -1553,18 +1469,15 @@
               <div class="section-card">
                 <div class="label-row"><span class="pill">The Teams</span></div>
                 <p class="big-message">Girl Groups</p>
-              
                 <p class="muted" style="margin-bottom:20px;">The queens have split into two teams...</p>
                 <div class="flex-col-center">
                   <div class="group-row">
                     <p class="muted" style="font-weight: 800; font-size: 16px; margin:0;">${escapeHtml(data.gg.teamA.name)}</p>
                     <div class="flex-center">${data.gg.teamA.queens.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
-   
                   </div>
                   <div class="group-row" style="border:none;">
                     <p class="muted" style="font-weight: 800; font-size: 16px; margin:0;">${escapeHtml(data.gg.teamB.name)}</p>
                     <div class="flex-center">${data.gg.teamB.queens.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
-              
                   </div>
                 </div>
               </div>
@@ -1574,12 +1487,10 @@
                 content = `
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Maxi Challenge</span></div>
-                
                     <p class="big-message">${data.maxi.name}</p>
                     <p class="muted" style="margin-bottom:20px;">The girl groups perform their original tracks...</p>
                     <div class="flex-col-center">
                       <div class="group-row"><p class="muted">Had a great performance!</p><div class="flex-center"><div class="placement-card bg-high">${escapeHtml(data.gg.winningName)}</div></div></div>
-                
                       <div class="group-row" style="border:none;"><p class="muted">Struggled to find their rhythm...</p><div class="flex-center"><div class="placement-card bg-low">${escapeHtml(data.gg.losingName)}</div></div></div>
                     </div>
                   </div>
@@ -1591,7 +1502,6 @@
                   if (cat === "Slayed" || cat === "Great") slayed.push(row.queen);
                   else if (cat === "Flopped" || cat === "Bad") bad.push(row.queen);
                   else okay.push(row.queen);
-     
                 });
                 slayed.sort(() => Math.random() - 0.5);
                 okay.sort(() => Math.random() - 0.5); bad.sort(() => Math.random() - 0.5);
@@ -1600,14 +1510,10 @@
                     <div class="label-row"><span class="pill">Maxi Challenge</span></div>
                     <p class="big-message">${data.maxi.name}</p>
                     <p class="muted" style="margin-bottom:20px;">The queens' performances...</p>
-         
                     <div class="flex-col-center">
-                      ${slayed.length ?
-                      `<div class="group-row"><p class="muted">Had a great performance!</p><div class="flex-center">${slayed.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
-                      ${okay.length ?
-                      `<div class="group-row"><p class="muted">Had a good performance.</p><div class="flex-center">${okay.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
-                      ${bad.length ?
-                      `<div class="group-row"><p class="muted">Had a bad performance...</p><div class="flex-center">${bad.map(q => `<div class="placement-card bg-low">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
+                      ${slayed.length ? `<div class="group-row"><p class="muted">Had a great performance!</p><div class="flex-center">${slayed.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
+                      ${okay.length ? `<div class="group-row"><p class="muted">Had a good performance.</p><div class="flex-center">${okay.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
+                      ${bad.length ? `<div class="group-row"><p class="muted">Had a bad performance...</p><div class="flex-center">${bad.map(q => `<div class="placement-card bg-low">${escapeHtml(q.name)}</div>`).join("")}</div></div>` : ""}
                     </div>
                   </div>
                 `;
@@ -1617,12 +1523,10 @@
                 content = `
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Judging!</span></div>
-       
                     <p class="muted" style="margin-bottom:16px;">Based on tonight's performances...</p>
                     <div class="flex-col-center">
                       <div class="group-row" style="border:none;">
                         <p class="big-message" style="font-size: 24px; color: var(--lime);">${escapeHtml(data.gg.winningName)}</p>
-        
                         <p class="muted">Condragulations, you are the winning team!</p>
                       </div>
                     </div>
@@ -1638,23 +1542,18 @@
                     <div class="label-row"><span class="pill">Judging!</span></div>
                     <p class="muted" style="margin-bottom:16px;">Based on tonight's performances...</p>
                     <div class="flex-col-center">
-         
                       <div class="flex-center">
                         ${tops.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                       </div>
-                      <p class="muted">You represent the tops of the week.
-                      There are no bottoms!</p>
-                      ${safes.length ?
-                      `
+                      <p class="muted">You represent the tops of the week. There are no bottoms!</p>
+                      ${safes.length ? `
                         <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:10px 0;">
                         <div class="flex-center">
                           ${safes.map(q => `<span class="placement-card small bg-safe">${escapeHtml(q.name)}</span>`).join("")}
-             
                         </div>
                         <p class="muted">You are safe.</p>
                       ` : ""}
                     </div>
-                  
                   </div>
                 `;
             } else {
@@ -1684,24 +1583,19 @@
                     <div class="label-row"><span class="pill">Judging!</span></div>
                     <p class="muted" style="margin-bottom:16px;">Based on tonight's performances...</p>
                     <div class="flex-col-center">
-         
                       <div class="flex-center">
                         ${tops.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                         ${bottoms.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                       </div>
-        
                       <p class="muted">You represent the tops and bottoms of the week.</p>
-                      ${safes.length ?
-                      `
+                      ${safes.length ? `
                         <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:10px 0;">
                         <div class="flex-center">
                           ${safes.map(q => `<span class="placement-card small bg-safe">${escapeHtml(q.name)}</span>`).join("")}
-             
                         </div>
                         <p class="muted">You are safe.</p>
                       ` : ""}
                     </div>
-                  
                   </div>
                 `;
             }
@@ -1711,8 +1605,7 @@
               if (state.seasonFormat === "all-stars-legacy") {
                   data.placements.highQueens.forEach(q => { q.record.HIGH += 1; q.history[epIndex] = "HIGH"; });
                   data.placements.pureSafe.forEach(q => { q.record.SAFE += 1; q.history[epIndex] = "SAFE"; });
-                  if (data.placements.savedLow) { data.placements.savedLow.record.LOW += 1; data.placements.savedLow.history[epIndex] = "LOW";
-                  }
+                  if (data.placements.savedLow) { data.placements.savedLow.record.LOW += 1; data.placements.savedLow.history[epIndex] = "LOW"; }
                   data.placements.bottomTwo.forEach(q => { q.record.BTM2 += 1; q.history[epIndex] = "BTM"; });
               } else if (isAssassin) {
                   data.placements.topOne.forEach(q => { q.record.WIN += 1; q.history[epIndex] = "WIN"; });
@@ -1733,8 +1626,7 @@
                   data.placements.highQueens.forEach(q => { q.record.HIGH += 1; q.history[epIndex] = "HIGH"; });
                   data.placements.pureSafe.forEach(q => { q.record.SAFE += 1; q.history[epIndex] = "SAFE"; });
                   if (data.placements.savedLow) { data.placements.savedLow.record.LOW += 1; data.placements.savedLow.history[epIndex] = "LOW"; }
-                  if (data.placements.bottomTwo) { data.placements.bottomTwo.forEach(q => { q.record.BTM2 += 1; q.history[epIndex] = "BTM2"; });
-                  }
+                  if (data.placements.bottomTwo) { data.placements.bottomTwo.forEach(q => { q.record.BTM2 += 1; q.history[epIndex] = "BTM2"; }); }
               }
               data.countsApplied = true;
             }
@@ -1745,26 +1637,20 @@
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Results</span></div>
                     <p class="muted" style="margin-bottom:16px;">Ladies of ${escapeHtml(data.gg.losingName)}, I've made some decisions...</p>
-        
                     <div class="flex-col-center">
-                      ${p.pureSafe.length ?
-                      `
+                      ${p.pureSafe.length ? `
                       <div class="group-row">
                         <div class="flex-center">${p.pureSafe.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">You are safe.</p>
-                     
                       </div>` : ""}
-                      ${p.savedLow ?
-                      `
+                      ${p.savedLow ? `
                       <div class="group-row">
                         <div class="flex-center"><div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div></div>
                         <p class="muted">You are safe, but step it up.</p>
-                   
                       </div>` : ""}
                       <div class="group-row" style="border:none;">
                         <div class="flex-center">${p.bottomTwo.map(q => `<div class="placement-card bg-btm">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">I'm sorry my dears but you are up for elimination.</p>
-        
                       </div>
                     </div>
                   </div>
@@ -1774,31 +1660,24 @@
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Results</span></div>
                     <p class="muted" style="margin-bottom:16px;">Ladies, I've made some decisions...</p>
-       
                     <div class="flex-col-center">
                       <div class="group-row">
                         <div class="flex-center">${p.topTwo.map(q => `<div class="placement-card bg-win">${escapeHtml(q.name)}</div>`).join("")}</div>
-                        <p class="muted">Condragulations, you are the Top 2 queens of the 
-                        week!</p>
+                        <p class="muted">Condragulations, you are the Top 2 queens of the week!</p>
                       </div>
-                      ${p.highQueens.length ?
-                      `
+                      ${p.highQueens.length ? `
                       <div class="group-row">
                         <div class="flex-center">${p.highQueens.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">Good job this week, you're safe.</p>
-                  
                       </div>` : ""}
-                      ${p.savedLow ?
-                      `
+                      ${p.savedLow ? `
                       <div class="group-row">
                         <div class="flex-center"><div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div></div>
                         <p class="muted">You are safe, but step it up.</p>
-                   
                       </div>` : ""}
                       <div class="group-row" style="border:none;">
                         <div class="flex-center">${p.bottomTwo.map(q => `<div class="placement-card bg-btm">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">I'm sorry my dears but you are the bottom queens of the week.</p>
-     
                       </div>
                     </div>
                   </div>
@@ -1808,31 +1687,24 @@
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Results</span></div>
                     <p class="muted" style="margin-bottom:16px;">Ladies, I've made some decisions...</p>
-         
                     <div class="flex-col-center">
                       <div class="group-row">
                         <div class="flex-center">${p.topOne.map(q => `<div class="placement-card bg-win">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">Condragulations, you are the Top All Star of the week!</p>
-  
                       </div>
-                      ${p.highQueens.length ?
-                      `
+                      ${p.highQueens.length ? `
                       <div class="group-row">
                         <div class="flex-center">${p.highQueens.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">Good job this week, you're safe.</p>
-                  
                       </div>` : ""}
-                      ${p.savedLow ?
-                      `
+                      ${p.savedLow ? `
                       <div class="group-row">
                         <div class="flex-center"><div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div></div>
                         <p class="muted">You are safe, but step it up.</p>
-                   
                       </div>` : ""}
                       <div class="group-row" style="border:none;">
                         <div class="flex-center">${p.bottomTwo.map(q => `<div class="placement-card bg-btm">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">I'm sorry my dears but you are the bottom queens of the week.</p>
-     
                       </div>
                     </div>
                   </div>
@@ -1843,33 +1715,26 @@
                     if (p.bottomThree) {
                          bottomsHTML = `<div class="flex-center">${p.bottomThree.map(q => `<div class="placement-card bg-low">${escapeHtml(q.name)}</div>`).join("")}</div>`;
                     } else {
-                         bottomsHTML = `<div class="flex-center">${p.savedLow ?
-                         `<div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div>` : ''}${p.bottomTwo.map(q => `<div class="placement-card bg-low">${escapeHtml(q.name)}</div>`).join("")}</div>`;
+                         bottomsHTML = `<div class="flex-center">${p.savedLow ? `<div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div>` : ''}${p.bottomTwo.map(q => `<div class="placement-card bg-low">${escapeHtml(q.name)}</div>`).join("")}</div>`;
                     }
                 }
                 content = `
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Results</span></div>
-              
                     <p class="muted" style="margin-bottom:16px;">Ladies, I've made some decisions...</p>
                     <div class="flex-col-center">
                       <div class="group-row">
                         <div class="flex-center">${p.topTwo.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
-               
                         <p class="muted">Condragulations, you are the Top 2 queens of the week!</p>
                       </div>
-                      ${p.highQueens.length ?
-                      `
+                      ${p.highQueens.length ? `
                       <div class="group-row">
                         <div class="flex-center">${p.highQueens.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">Good job this week, you're safe.</p>
-                  
                       </div>` : ""}
                       <div class="group-row" style="border:none;">
                         ${bottomsHTML}
-                        <p class="muted">${data.isMidSeasonNonElim ?
-                        "Since you all did so well this week, Nobody is going home!"
-                        : "Since its our first episode, Nobody is going home!"} instead the top 2 will lip sync for the win!</p>
+                        <p class="muted">${data.isMidSeasonNonElim ? "Since you all did so well this week, Nobody is going home!" : "Since its our first episode, Nobody is going home!"} instead the top 2 will lip sync for the win!</p>
                       </div>
                     </div>
                   </div>
@@ -1879,31 +1744,24 @@
                   <div class="section-card">
                     <div class="label-row"><span class="pill">Results</span></div>
                     <p class="muted" style="margin-bottom:16px;">Ladies, I've made some decisions...</p>
-           
                     <div class="flex-col-center">
                       <div class="group-row">
                         <div class="flex-center">${p.winners.map(q => `<div class="placement-card bg-win">${escapeHtml(q.name)}</div>`).join("")}</div>
-                        <p class="muted">Condragulations, you're the winner${p.winners.length > 1 ?
-                        "s" : ""} of today's challenge!</p>
+                        <p class="muted">Condragulations, you're the winner${p.winners.length > 1 ? "s" : ""} of today's challenge!</p>
                       </div>
-                      ${p.highQueens.length ?
-                      `
+                      ${p.highQueens.length ? `
                       <div class="group-row">
                         <div class="flex-center">${p.highQueens.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">Good job this week, you're safe.</p>
-                  
                       </div>` : ""}
-                      ${p.savedLow ?
-                      `
+                      ${p.savedLow ? `
                       <div class="group-row">
                         <div class="flex-center"><div class="placement-card bg-low">${escapeHtml(p.savedLow.name)}</div></div>
                         <p class="muted">You are safe, but step it up.</p>
-                   
                       </div>` : ""}
                       <div class="group-row" style="border:none;">
                         <div class="flex-center">${(p.bottomTwo || []).map(q => `<div class="placement-card bg-btm">${escapeHtml(q.name)}</div>`).join("")}</div>
                         <p class="muted">I'm sorry my dears but you are up for elimination.</p>
-      
                       </div>
                     </div>
                   </div>
@@ -1913,12 +1771,10 @@
               content = `
                 <div class="section-card flex-col-center">
                   <div class="label-row"><span class="pill">Assassin Ruveal</span></div>
-                  <p class="muted">Will the secret Lip Sync Assassin please Ruveal 
-                  yourself?</p>
+                  <p class="muted">Will the secret Lip Sync Assassin please Ruveal yourself?</p>
                   <p class="big-message" style="margin-top:16px; color:var(--danger);">${escapeHtml(data.lsaData.lsa.name)}!</p>
                   <div class="flex-center">
-                     ${data.lsaData.lsa.image ?
-                     `<img src="${escapeHtml(data.lsaData.lsa.image)}" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">` : ''}
+                     ${data.lsaData.lsa.image ? `<img src="${escapeHtml(data.lsaData.lsa.image)}" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">` : ''}
                   </div>
                 </div>
               `;
@@ -1942,10 +1798,8 @@
                   else if (p2.record.BTM2 >= 4 && p1.record.BTM2 < 4) s2 = -999;
               }
 
-              let winner = s1 >= s2 ?
-              {queen: p1, event: e1} : {queen: p2, event: e2};
-              let loser = s1 >= s2 ?
-              {queen: p2, event: e2} : {queen: p1, event: e1};
+              let winner = s1 >= s2 ? {queen: p1, event: e1} : {queen: p2, event: e2};
+              let loser = s1 >= s2 ? {queen: p2, event: e2} : {queen: p1, event: e1};
               data.lipSync = { song: pick(lipSongs), performances: [{queen: p1, event: e1}, {queen: p2, event: e2}], winner, loser, s1, s2 };
             }
             
@@ -1962,19 +1816,16 @@
               <div class="section-card">
                 <div class="label-row"><span class="pill">The time has come...</span></div>
                 <p class="muted">${lipSyncText}</p>
-                <p class="big-message" style="margin: 
-                16px 0;">${escapeHtml(data.lipSync.song)}</p>
+                <p class="big-message" style="margin: 16px 0;">${escapeHtml(data.lipSync.song)}</p>
                 <div class="flex-center" style="align-items: stretch; gap: 16px;">
                   ${data.lipSync.performances.map(p => `
                     <div style="text-align:center; width: 160px; display: flex; flex-direction: column;">
                       <div class="placement-card bg-safe" style="flex: 1;">${escapeHtml(p.queen.name)}</div>
-     
                       <p class="muted" style="margin-top:6px; font-size:13px;">${p.event.text}</p>
                     </div>
                   `).join("")}
                 </div>
               </div>
-            
             `;
           } else if (phaseTag === "lsa_lipsync") {
               if (!data.lipSync) {
@@ -1991,25 +1842,22 @@
                   if (data.riggedOutcome === "w2") data.lipSync.winner.queen = p2;
                   if (data.lipSync.winner.queen.name === p2.name && data.lsaData.isTie) {
                       data.lsaData.tieBreakerNeeded = true;
+                      el.screenCounterText.textContent = "";
                   }
               }
 
               content = `
                 <div class="section-card">
                   <div class="label-row"><span class="pill">The time has come...</span></div>
-                  <p class="muted">Two queens stand 
-                  before me. Prior to tonight, you were asked to prepare a lip sync performance... for your legacy!
-                  Good luck, and don't f*ck it up.</p>
+                  <p class="muted">Two queens stand before me. Prior to tonight, you were asked to prepare a lip sync performance... for your legacy! Good luck, and don't f*ck it up.</p>
                   <p class="big-message" style="margin: 16px 0;">${escapeHtml(data.lipSync.song)}</p>
                   <div class="flex-center" style="align-items: stretch; gap: 16px;">
                     ${data.lipSync.performances.map(p => `
-                      <div style="text-align:center; width: 160px; display: 
-                      flex; flex-direction: column;">
+                      <div style="text-align:center; width: 160px; display: flex; flex-direction: column;">
                         <div class="placement-card bg-safe" style="flex: 1;">${escapeHtml(p.queen.name)}</div>
                         <p class="muted" style="margin-top:6px; font-size:13px;">${p.event.text}</p>
                       </div>
                     `).join("")}
- 
                   </div>
                 </div>
               `;
@@ -2039,15 +1887,12 @@
                   elimContent = `
                     <div class="group-row">
                       <div class="placement-card bg-win">${escapeHtml(data.placements.topOne[0].name)}</div>
-                      <p class="muted">You're a winner baby!
-                      You have earned a cash tip of $10,000.</p>
+                      <p class="muted">You're a winner baby! You have earned a cash tip of $10,000.</p>
                     </div>
                     <div class="group-row" style="border:none;">
-                      <p class="muted">With great power comes great responsibility.
-                      Who have you chosen to get the chop?</p>
+                      <p class="muted">With great power comes great responsibility. Who have you chosen to get the chop?</p>
                       <div class="placement-card bg-elim">${escapeHtml(e.eliminatedQueen.name)}</div>
-                      <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done.
-                      Sashay away.</p>
+                      <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done. Sashay away.</p>
                     </div>
                   `;
               } else {
@@ -2055,34 +1900,27 @@
                       elimContent = `
                         <div class="group-row">
                           <div class="placement-card bg-win">${escapeHtml(data.lsaData.lsa.name)}</div>
- 
                           <p class="muted">You're a winner baby!</p>
                         </div>
                         <div class="group-row" style="border:none;">
-                     
                           <p class="muted">Now, Lip Sync Assassin, reveal the group's vote.</p>
                           <div class="flex-center" style="margin-top:8px; margin-bottom:8px;">
                               ${data.lsaData.groupChoice.map(q => `<div class="placement-card bg-elim">${escapeHtml(q.name)}</div>`).join("")}
-                        
                           </div>
                           <p class="muted" style="color:var(--danger); font-weight:800;">It's a TIE!</p>
                           <p class="muted">Because of the tie, the power to eliminate returns to the Top All Star.</p>
                         </div>
-   
                       `;
                   } else {
                       elimContent = `
                         <div class="group-row">
                           <div class="placement-card bg-win">${escapeHtml(data.lsaData.lsa.name)}</div>
-                     
                           <p class="muted">You're a winner baby!</p>
                         </div>
                         <div class="group-row" style="border:none;">
-                          <p class="muted">Now, Lip Sync Assassin, reveal the group's vote.
-                          The group has chosen...</p>
+                          <p class="muted">Now, Lip Sync Assassin, reveal the group's vote. The group has chosen...</p>
                           <div class="placement-card bg-elim">${escapeHtml(e.eliminatedQueen.name)}</div>
-                          <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done.
-                          Sashay away.</p>
+                          <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done. Sashay away.</p>
                         </div>
                       `;
                   }
@@ -2091,7 +1929,6 @@
               content = `
                 <div class="section-card">
                   <div class="label-row"><span class="pill">Decisions...</span></div>
-                 
                   <div class="flex-col-center" style="margin-top:16px;">
                     ${elimContent}
                   </div>
@@ -2109,12 +1946,9 @@
                   <div class="label-row"><span class="pill">Tie Breaker</span></div>
                   <div class="flex-col-center" style="margin-top:16px;">
                     <div class="group-row" style="border:none;">
-  
-                      <p class="muted">${escapeHtml(data.placements.topOne[0].name)}, as the Top All Star, you must break the tie.
-                      Who have you chosen to get the chop?</p>
+                      <p class="muted">${escapeHtml(data.placements.topOne[0].name)}, as the Top All Star, you must break the tie. Who have you chosen to get the chop?</p>
                       <div class="placement-card bg-elim">${escapeHtml(data.lsaData.topChoice.name)}</div>
-                      <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done.
-                      Sashay away.</p>
+                      <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done. Sashay away.</p>
                     </div>
                   </div>
                 </div>
@@ -2128,14 +1962,10 @@
               let isDoubleShantay = (s1 >= 13 && s2 >= 13 && Math.random() < 0.1);
               let isDoubleSashay = (s1 <= 7 && s2 <= 7 && Math.random() < 0.02 && activeQueens().length > (state.finaleFormat === "top3" ? 4 : 5));
               if (data.riggedOutcome) {
-                   if (data.riggedOutcome === "w1") { w = ev1.queen;
-                   l = ev2.queen; isDoubleShantay=false; isDoubleSashay=false;}
-                   if (data.riggedOutcome === "w2") { w = ev2.queen;
-                   l = ev1.queen; isDoubleShantay=false; isDoubleSashay=false;}
-                   if (data.riggedOutcome === "double_shantay") { isDoubleShantay = true;
-                   isDoubleSashay = false; }
-                   if (data.riggedOutcome === "double_sashay") { isDoubleSashay = true;
-                   isDoubleShantay = false; }
+                   if (data.riggedOutcome === "w1") { w = ev1.queen; l = ev2.queen; isDoubleShantay=false; isDoubleSashay=false;}
+                   if (data.riggedOutcome === "w2") { w = ev2.queen; l = ev1.queen; isDoubleShantay=false; isDoubleSashay=false;}
+                   if (data.riggedOutcome === "double_shantay") { isDoubleShantay = true; isDoubleSashay = false; }
+                   if (data.riggedOutcome === "double_sashay") { isDoubleSashay = true; isDoubleShantay = false; }
               }
 
               if (state.seasonFormat === "all-stars-legacy") {
@@ -2191,33 +2021,27 @@
                 contentInner = `
                   <div class="group-row">
                     <div class="placement-card bg-win">${escapeHtml(e.winner.name)}</div>
-                    <p class="muted">You're a winner baby!
-                    You have earned a cash tip of $10,000.</p>
+                    <p class="muted">You're a winner baby! You have earned a cash tip of $10,000.</p>
                   </div>
                   <div class="group-row">
                     <div class="placement-card bg-top2">${escapeHtml(e.top2loser.name)}</div>
                     <p class="muted">You are safe.</p>
-           
                   </div>
                   <div class="group-row" style="border:none;">
-                    <p class="muted" style="margin-bottom: 8px;">${escapeHtml(e.winner.name)}, with great power comes great responsibility.
-                    Which queen have you chosen to get the chop?</p>
+                    <p class="muted" style="margin-bottom: 8px;">${escapeHtml(e.winner.name)}, with great power comes great responsibility. Which queen have you chosen to get the chop?</p>
                     <div class="placement-card bg-elim">${escapeHtml(e.eliminated.name)}</div>
-                    <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done.
-                    Sashay away.</p>
+                    <p class="muted" style="margin-top: 8px;">As it is written, so it shall be done. Sashay away.</p>
                   </div>
                 `;
             } else if (e.legacyNoElim) {
                 contentInner = `
                   <div class="group-row">
                     <div class="placement-card bg-win">${escapeHtml(e.winner.name)}</div>
-                    <p class="muted">You're a winner baby!
-                    You have earned a cash tip of $10,000.</p>
+                    <p class="muted">You're a winner baby! You have earned a cash tip of $10,000.</p>
                   </div>
                   <div class="group-row" style="border:none;">
                     <div class="placement-card bg-top2">${escapeHtml(e.top2loser.name)}</div>
                     <p class="muted">You are safe to slay another day.</p>
-      
                     <p class="muted" style="margin-top: 8px; font-weight: bold;">Since it's the premiere, no one is going home tonight!</p>
                   </div>
                 `;
@@ -2226,23 +2050,19 @@
                   <div class="group-row">
                     <div class="placement-card bg-win">${escapeHtml(e.winner.name)}</div>
                     <p class="muted">You're a winner baby!</p>
-             
                   </div>
                   <div class="group-row" style="border:none;">
                     <div class="placement-card bg-top2">${escapeHtml(e.loser.name)}</div>
                     <p class="muted">You are safe to slay another day.</p>
                   </div>
-        
                 `;
             } else if (e.doubleShantay) {
-                let text = e.forcedNoElim ?
-                "I'm not ready for either of you to go. Shantay you BOTH stay!" : "Shantay you BOTH stay!";
+                let text = e.forcedNoElim ? "I'm not ready for either of you to go. Shantay you BOTH stay!" : "Shantay you BOTH stay!";
                 contentInner = `
                   <div class="group-row" style="border:none;">
                     <div class="flex-center">
                         <div class="placement-card bg-shantay">${escapeHtml(e.q1.name)}</div>
                         <div class="placement-card bg-shantay">${escapeHtml(e.q2.name)}</div>
-     
                     </div>
                     <p class="muted">${text}</p>
                   </div>
@@ -2252,11 +2072,9 @@
                   <div class="group-row" style="border:none;">
                     <div class="flex-center">
                         <div class="placement-card bg-elim">${escapeHtml(e.q1.name)}</div>
-           
                         <div class="placement-card bg-elim">${escapeHtml(e.q2.name)}</div>
                     </div>
-                    <p class="muted">Neither one of you showed me the power it takes to stay.
-                    I'm sending you BOTH home.</p>
+                    <p class="muted">Neither one of you showed me the power it takes to stay. I'm sending you BOTH home.</p>
                   </div>
                 `;
             } else {
@@ -2264,13 +2082,11 @@
                   <div class="group-row">
                     <div class="placement-card bg-shantay">${escapeHtml(e.survivor.name)}</div>
                     <p class="muted">Shantay you stay.</p>
-                
                   </div>
                   <div class="group-row" style="border:none;">
                     <div class="placement-card bg-elim">${escapeHtml(e.eliminated.name)}</div>
                     <p class="muted">Sashay away.</p>
                   </div>
-                
                 `;
             }
 
@@ -2279,7 +2095,6 @@
                 <div class="label-row"><span class="pill">Decisions...</span></div>
                 <div class="flex-col-center" style="margin-top:16px;">
                   ${contentInner}
-              
                 </div>
               </div>
             `;
@@ -2293,23 +2108,19 @@
                 <div style="display:flex; gap: 8px; margin-bottom: 16px;">
                   <span class="pill">Track Record</span>
                 </div>
-  
                 <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px;">Season standings</h2>
                 <div style="overflow-x: auto;">
                   <table class="standings-table">
                     <thead>
-                    
                       <tr>
                         <th>Queen</th>
                         ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
                         <th>Score</th>
-                    
                       </tr>
                     </thead>
                     <tbody>
                       ${sortedQueens.map(q => `
                         <tr>
-          
                           <td class="qname-cell">${escapeHtml(q.name)}</td>
                           ${Array.from({length: state.episodeNumber}, (_, i) => {
                             let p = q.history[i];
@@ -2321,7 +2132,6 @@
                         </tr>
                       `).join("")}
                     </tbody>
-      
                   </table>
                 </div>
               </div>
@@ -2331,8 +2141,7 @@
 
       el.gameContent.innerHTML = content;
       if (phaseTag === 7) {
-        const finaleThreshold = state.finaleFormat === "top3" ?
-        3 : 4;
+        const finaleThreshold = state.finaleFormat === "top3" ? 3 : 4;
         el.nextPhaseBtn.textContent = activeQueens().length <= finaleThreshold ? "Start Finale" : "Next Episode";
       } else {
         el.nextPhaseBtn.textContent = "Next";
@@ -2347,7 +2156,6 @@
               totalPhases = (state.episodeData.lsaData && state.episodeData.lsaData.tieBreakerNeeded) ? 9 : 8;
           }
       }
-    
       
       if (state.phase < totalPhases) { state.phase++; renderEpisode(); }
       else {
@@ -2356,11 +2164,11 @@
         else { state.episodeNumber++; state.phase = 1; prepareEpisode(); renderEpisode(); }
       }
     });
+
     function makeMatch(q1, q2) {
       let power1 = trackScore(q1) + (q1.record.WIN * 10);
       let power2 = trackScore(q2) + (q2.record.WIN * 10);
-      if (power1 === power2) { power1 += Math.random(); power2 += Math.random();
-      }
+      if (power1 === power2) { power1 += Math.random(); power2 += Math.random(); }
       return power1 >= power2 ? {winner: q1, loser: q2} : {winner: q2, loser: q1};
     }
 
@@ -2427,22 +2235,21 @@
           if (f.step === 1) {
             content = `
               <div class="section-card flex-col-center">
+                <div class="label-row"></div>
                 <p class="big-message">Semifinal 1 Matchup</p>
-            
                 <div class="flex-center" style="gap:24px; margin-top: 12px;">
                   <div class="placement-card bg-safe">${escapeHtml(f.semi1.winner.name)}</div>
                   <p class="muted" style="font-weight:900;">VS</p>
                   <div class="placement-card bg-safe">${escapeHtml(f.semi1.loser.name)}</div>
                 </div>
               </div>
-  
             `;
           } else if (f.step === 2) {
             content = `
               <div class="section-card flex-col-center">
+                <div class="label-row"></div>
                 <p class="big-message">Semifinal 1 Winner</p>
                 <div class="group-row" style="border:none;">
-      
                   <div class="placement-card bg-high">${escapeHtml(f.semi1.winner.name)}</div>
                   <p class="muted" style="font-size:12px;">Eliminated: ${escapeHtml(f.semi1.loser.name)}</p>
                 </div>
@@ -2451,9 +2258,9 @@
           } else if (f.step === 3) {
             content = `
               <div class="section-card flex-col-center">
+                <div class="label-row"></div>
                 <p class="big-message">Semifinal 2 Matchup</p>
                 <div class="flex-center" style="gap:24px; margin-top: 12px;">
-    
                   <div class="placement-card bg-safe">${escapeHtml(f.semi2.winner.name)}</div>
                   <p class="muted" style="font-weight:900;">VS</p>
                   <div class="placement-card bg-safe">${escapeHtml(f.semi2.loser.name)}</div>
@@ -2463,9 +2270,9 @@
           } else if (f.step === 4) {
             content = `
               <div class="section-card flex-col-center">
+                <div class="label-row"></div>
                 <p class="big-message">Semifinal 2 Winner</p>
                 <div class="group-row" style="border:none;">
-      
                   <div class="placement-card bg-high">${escapeHtml(f.semi2.winner.name)}</div>
                   <p class="muted" style="font-size:12px;">Eliminated: ${escapeHtml(f.semi2.loser.name)}</p>
                 </div>
@@ -2474,9 +2281,9 @@
           } else if (f.step === 5) {
             content = `
               <div class="section-card flex-col-center">
+                <div class="label-row"></div>
                 <p class="big-message">The Final Lip Sync</p>
                 <div class="flex-center" style="gap:24px; margin-top: 12px;">
-   
                   <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
                   <p class="muted" style="font-weight:900;">VS</p>
                   <div class="placement-card bg-safe">${escapeHtml(f.final.loser.name)}</div>
@@ -2487,104 +2294,84 @@
             el.finaleBtn.classList.add("hidden");
             content = `
               <div class="flex-col-center" style="gap: 20px; padding: 24px 0;">
+                <div class="label-row"></div>
                 <p class="big-message">The Winner of the season is...</p>
                 <div id="loadingSpinner" style="height: 80px; display: grid; place-items: center;">
-            
                   <div class="spinner"></div>
                 </div>
                 <div id="winnerRevealBox" class="hidden flex-col-center" style="width:100%;">
                     <div class="placement-card bg-winner" style="padding: 24px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 24px;">
-                      <p style="margin:0 0 
-                      8px; font-size:14px; font-weight:600; opacity:0.8;">WINNER</p>
+                      <p style="margin:0 0 8px; font-size:14px; font-weight:600; opacity:0.8;">WINNER</p>
                       <p class="big-message" style="margin:0;">${escapeHtml(f.final.winner.name)}<span class="winner-crown">👑</span></p>
                     </div>
-                    <div class="placement-card bg-runner" style="padding: 16px;
-                    width: 100%; max-width: 400px; border-radius: 16px;">
-                      <p style="margin:0 0 4px;
-                      font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
-                      <p style="margin:0;
-                      font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
+                    <div class="placement-card bg-runner" style="padding: 16px; width: 100%; max-width: 400px; border-radius: 16px;">
+                      <p style="margin:0 0 4px; font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
+                      <p style="margin:0; font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
                     </div>
                 </div>
               </div>
             `;
             setTimeout(() => {
               const spinner = document.getElementById("loadingSpinner");
-     
               const box = document.getElementById("winnerRevealBox");
               if (spinner && box) {
                   spinner.classList.add("hidden"); box.classList.remove("hidden");
                   el.finaleBtn.classList.remove("hidden");
               }
             }, 3000);
-      
           } else if (f.step === 7) {
             let sortedQueens = [...state.queens].sort((a, b) => {
               if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
               return trackScore(b) - trackScore(a);
             });
             content = `
-        
-              <div class="section-card" id="finaleTrackRecord" style="text-align: left; padding: 24px;
-              background: white;">
-                <div style="display:flex;
-                gap: 8px; margin-bottom: 16px;">
+              <div class="section-card" id="finaleTrackRecord" style="text-align: left; padding: 24px; background: white;">
+                <div style="display:flex; gap: 8px; margin-bottom: 16px;">
                   <span class="pill">Final Track Record</span>
                 </div>
-                <h2 style="font-size: 24px;
-                font-weight: 900; margin: 0 0 16px; text-align: center;">Final Season Standings</h2>
+                <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px; text-align: center;">Final Season Standings</h2>
                 <div style="overflow-x: auto;">
                   <table class="standings-table">
                     <thead>
                       <tr>
-            
                         <th>Queen</th>
                         ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
                         <th>Score</th>
                       </tr>
-            
                     </thead>
                     <tbody>
                       ${sortedQueens.map(q => `
                         <tr>
-                        
                           <td class="qname-cell">${escapeHtml(q.name)}</td>
                           ${Array.from({length: state.episodeNumber}, (_, i) => {
                             let p = q.history[i];
                             if (!p) return `<td class="empty-cell"></td>`;
-   
                             let cssClass = getTrackRecordClass(p);
-                            return `<td class="${cssClass}" style="font-weight: 900;
-                            font-size: 12px;">${p}</td>`;
+                            return `<td class="${cssClass}" style="font-weight: 900; font-size: 12px;">${p}</td>`;
                           }).join("")}
                           <td style="font-weight: 600;">${trackScore(q)}</td>
                         </tr>
-                     
                       `).join("")}
                     </tbody>
                   </table>
                 </div>
               </div>
-              <div class="button-row" style="justify-content: center;
-              margin-top: 16px;">
+              <div class="button-row" style="justify-content: center; margin-top: 16px;">
                  <button id="downloadPngBtn" class="secondary">Download Track Record as PNG</button>
               </div>
             `;
             setTimeout(() => {
                  const btn = document.getElementById("downloadPngBtn");
-                
                  if(btn) btn.addEventListener("click", () => {
                      html2canvas(document.getElementById("finaleTrackRecord")).then(canvas => {
                          const link = document.createElement("a");
                          link.download = "drag_race_track_record.png";
-                 
                          link.href = canvas.toDataURL("image/png");
                          link.click();
                      });
                  });
             }, 100);
-            el.finaleBtn.textContent = 
-            "End Season";
+            el.finaleBtn.textContent = "End Season";
           } else {
             state.mode = "setup";
             state.queens = []; updateSetupUI(); clearQueenForm(); renderAll(); return;
@@ -2592,40 +2379,36 @@
       } else if (state.finaleFormat === "top3") {
           if (f.step === 1) {
               content = `
-   
                 <div class="section-card flex-col-center">
+                  <div class="label-row"></div>
                   <p class="big-message">The Top 3</p>
-                  <p class="muted">Condragulations on making it to the finale!
-                  You've all performed exceptionally well all season, but unfortunately, one of you will not be making it to the final lip sync.</p>
+                  <p class="muted">Condragulations on making it to the finale! You've all performed exceptionally well all season, but unfortunately, one of you will not be making it to the final lip sync.</p>
                   <div class="flex-center" style="gap:16px; margin-top: 12px;">
                     ${f.finalists.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                   </div>
-               
                 </div>
               `;
           } else if (f.step === 2) {
               content = `
                 <div class="section-card flex-col-center">
+                  <div class="label-row"></div>
                   <p class="big-message">A difficult decision...</p>
-                
                   <p class="muted">Based on your performances and track records all season...</p>
                   <div class="group-row" style="border:none; margin-top: 16px;">
                     <div class="placement-card bg-elim">${escapeHtml(f.thirdPlace.name)}</div>
-                    <p class="muted" style="margin-top: 8px;">I'm sorry my dear, but you will not be moving forward to the final lip sync.
-                    Sashay away.</p>
+                    <p class="muted" style="margin-top: 8px;">I'm sorry my dear, but you will not be moving forward to the final lip sync. Sashay away.</p>
                   </div>
                 </div>
               `;
           } else if (f.step === 3) {
               content = `
                 <div class="section-card flex-col-center">
+                  <div class="label-row"></div>
                   <p class="big-message">The Final Lip Sync</p>
-               
                   <p class="muted">Two queens stand before me. Prior to tonight, you were asked to prepare a lip sync performance to:</p>
                   <p class="big-message" style="margin: 12px 0;">${escapeHtml(f.lipSong)}</p>
                   <div class="flex-center" style="gap:24px; margin-top: 12px;">
                     <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
-             
                     <p class="muted" style="font-weight:900;">VS</p>
                     <div class="placement-card bg-safe">${escapeHtml(f.final.loser.name)}</div>
                   </div>
@@ -2635,109 +2418,88 @@
               el.finaleBtn.classList.add("hidden");
               content = `
                 <div class="flex-col-center" style="gap: 20px; padding: 24px 0;">
+                  <div class="label-row"></div>
                   <p class="big-message">The Winner of the season is...</p>
                   <div id="loadingSpinner" style="height: 80px; display: grid; place-items: center;">
-    
                     <div class="spinner"></div>
                   </div>
                   <div id="winnerRevealBox" class="hidden flex-col-center" style="width:100%;">
                       <div class="placement-card bg-winner" style="padding: 24px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 24px;">
-         
                         <p style="margin:0 0 8px; font-size:14px; font-weight:600; opacity:0.8;">WINNER</p>
                         <p class="big-message" style="margin:0;">${escapeHtml(f.final.winner.name)}<span class="winner-crown">👑</span></p>
                       </div>
-                      <div class="placement-card bg-runner" style="padding: 16px;
-                      width: 100%; max-width: 400px; border-radius: 16px;">
-                        <p style="margin:0 0 4px;
-                        font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
-                        <p style="margin:0;
-                        font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
+                      <div class="placement-card bg-runner" style="padding: 16px; width: 100%; max-width: 400px; border-radius: 16px;">
+                        <p style="margin:0 0 4px; font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
+                        <p style="margin:0; font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
                       </div>
                   </div>
                 </div>
               `;
               setTimeout(() => {
-            
                 const spinner = document.getElementById("loadingSpinner");
                 const box = document.getElementById("winnerRevealBox");
                 if (spinner && box) {
                     spinner.classList.add("hidden"); box.classList.remove("hidden");
                     el.finaleBtn.classList.remove("hidden");
-             
-                 }
+                }
               }, 3000);
           } else if (f.step === 5) {
               let sortedQueens = [...state.queens].sort((a, b) => {
                 if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
                 return trackScore(b) - trackScore(a);
-    
               });
               content = `
-                <div class="section-card" id="finaleTrackRecord" style="text-align: left;
-                padding: 24px; background: white;">
-                  <div style="display:flex;
-                  gap: 8px; margin-bottom: 16px;">
+                <div class="section-card" id="finaleTrackRecord" style="text-align: left; padding: 24px; background: white;">
+                  <div style="display:flex; gap: 8px; margin-bottom: 16px;">
                     <span class="pill">Final Track Record</span>
                   </div>
-                  <h2 style="font-size: 24px;
-                  font-weight: 900; margin: 0 0 16px; text-align: center;">Final Season Standings</h2>
+                  <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 16px; text-align: center;">Final Season Standings</h2>
                   <div style="overflow-x: auto;">
                     <table class="standings-table">
                       <thead>
                         <tr>
-    
                           <th>Queen</th>
                           ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
                           <th>Score</th>
-                    
                         </tr>
                       </thead>
                       <tbody>
                         ${sortedQueens.map(q => `
-                          
                           <tr>
                             <td class="qname-cell">${escapeHtml(q.name)}</td>
                             ${Array.from({length: state.episodeNumber}, (_, i) => {
                               let p = q.history[i];
-     
                               if (!p) return `<td class="empty-cell"></td>`;
                               let cssClass = getTrackRecordClass(p);
-                              return `<td class="${cssClass}" style="font-weight: 900;
-                              font-size: 12px;">${p}</td>`;
+                              return `<td class="${cssClass}" style="font-weight: 900; font-size: 12px;">${p}</td>`;
                             }).join("")}
                             <td style="font-weight: 600;">${trackScore(q)}</td>
                           </tr>
-               
                         `).join("")}
                       </tbody>
                     </table>
                   </div>
                 </div>
-               
-                <div class="button-row" style="justify-content: center; margin-top: 16px;">
+               <div class="button-row" style="justify-content: center; margin-top: 16px;">
                    <button id="downloadPngBtn" class="secondary">Download Track Record as PNG</button>
                 </div>
               `;
               setTimeout(() => {
                    const btn = document.getElementById("downloadPngBtn");
- 
-                   if(btn) btn.addEventListener("click", () => {
+                  if(btn) btn.addEventListener("click", () => {
                        html2canvas(document.getElementById("finaleTrackRecord")).then(canvas => {
                            const link = document.createElement("a");
-                       
                            link.download = "drag_race_track_record.png";
                            link.href = canvas.toDataURL("image/png");
                            link.click();
                        });
-               
-                   });
+                  });
               }, 100);
               el.finaleBtn.textContent = "End Season";
           } else {
               state.mode = "setup";
               state.queens = []; updateSetupUI(); clearQueenForm(); renderAll(); return;
           }
-      
       }
       
       el.finaleContent.innerHTML = content;
@@ -2753,13 +2515,11 @@
         const isGG = state.episodeData.isGirlGroup;
         const isLaLa = state.episodeData.isLaLaPaRuza;
 
-       
         if ((isGG && state.phase === 4) || (!isGG && !isLaLa && state.phase === 3) || (isTop1Format && state.phase === 3)) {
             let tops = isTop2Format ? [...p.topTwo, ...p.highQueens] : (isTop1Format ? [...p.topOne, ...p.highQueens] : [...p.winners, ...p.highQueens]);
             let bottoms = p.bottomThree ? [...p.bottomThree] : [...(p.savedLow ? [p.savedLow] : []), ...(p.bottomTwo || [])];
             
             if (!isGG) {
- 
                 if (isTop2Format) {
                     html += `<label class="field" style="margin-bottom:8px;">Select Top 2 Queen 1: <select id="rigTop1">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
                     html += `<label class="field" style="margin-bottom:8px;">Select Top 2 Queen 2: <select id="rigTop2">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
@@ -2806,12 +2566,9 @@
                 <label class="field">Select Lip Sync Outcome:
                     <select id="rigLipSync">
                         <option value="w1">${escapeHtml(p1.name)} Wins</option>
-       
                         <option value="w2">${escapeHtml(p2.name)} Wins</option>
-                        ${!isTop2LipSyncTrigger ?
-                        `<option value="double_shantay">Double Shantay</option>` : ''}
-                        ${!isTop2LipSyncTrigger && canDoubleSashay ?
-                        `<option value="double_sashay">Double Sashay</option>` : ''}
+                        ${!isTop2LipSyncTrigger ? `<option value="double_shantay">Double Shantay</option>` : ''}
+                        ${!isTop2LipSyncTrigger && canDoubleSashay ? `<option value="double_sashay">Double Sashay</option>` : ''}
                     </select>
                 </label>
             `;
@@ -2820,6 +2577,7 @@
             el.rigModal.classList.remove("hidden");
         }
     });
+
     el.rigFinaleBtn.addEventListener("click", () => {
         const f = state.finaleData;
         let html = "";
@@ -2827,13 +2585,11 @@
             if (f.step === 1) { 
                 html = `<label class="field">Winner of Semi 1: <select id="rigSemi1"><option value="${f.semi1.winner.id}">${f.semi1.winner.name}</option><option value="${f.semi1.loser.id}">${f.semi1.loser.name}</option></select></label>`;
                 el.rigModal.dataset.rigType = "fin_top4_s1";
-  
             } else if (f.step === 3) {
                 html = `<label class="field">Winner of Semi 2: <select id="rigSemi2"><option value="${f.semi2.winner.id}">${f.semi2.winner.name}</option><option value="${f.semi2.loser.id}">${f.semi2.loser.name}</option></select></label>`;
                 el.rigModal.dataset.rigType = "fin_top4_s2";
             } else if (f.step === 5) {
-                html = `<label class="field">Season Winner: <select 
-                id="rigFin"><option value="${f.final.winner.id}">${f.final.winner.name}</option><option value="${f.final.loser.id}">${f.final.loser.name}</option></select></label>`;
+                html = `<label class="field">Season Winner: <select id="rigFin"><option value="${f.final.winner.id}">${f.final.winner.name}</option><option value="${f.final.loser.id}">${f.final.loser.name}</option></select></label>`;
                 el.rigModal.dataset.rigType = "fin_top4_fin";
             }
         } else if (state.finaleFormat === "top3") {
@@ -2856,14 +2612,12 @@
             const p = state.episodeData.placements;
             let isTop2Format = (state.seasonFormat === "all-stars-legacy" || (state.episodeNumber === 1 && state.premiereFormat === "top2") || state.episodeData.isMidSeasonNonElim);
             let isTop1Format = state.seasonFormat === "all-stars-assassin";
-     
-             let tops = isTop2Format ? [...p.topTwo, ...p.highQueens] : (isTop1Format ? [...p.topOne, ...p.highQueens] : [...p.winners, ...p.highQueens]);
+            let tops = isTop2Format ? [...p.topTwo, ...p.highQueens] : (isTop1Format ? [...p.topOne, ...p.highQueens] : [...p.winners, ...p.highQueens]);
             let bottoms = p.bottomThree ? [...p.bottomThree] : [...(p.savedLow ? [p.savedLow] : []), ...(p.bottomTwo || [])];
 
             if (!state.episodeData.isGirlGroup) {
                 if (isTop2Format) {
-                    let 
-                    t1 = document.getElementById("rigTop1").value;
+                    let t1 = document.getElementById("rigTop1").value;
                     let t2 = document.getElementById("rigTop2").value;
                     if(t1 === t2) return alert("Must select two different queens for Top 2.");
                     p.topTwo = tops.filter(q => q.id == t1 || q.id == t2);
@@ -2975,35 +2729,27 @@
         try {
           const parsed = JSON.parse(reader.result);
           if (!parsed.queens) return alert("Invalid JSON format.");
-          state.queens = parsed.queens.map(q 
-          // Corrected Version
-          // state.queens = parsed.queens.map(q => 
-                    ({ 
-                      name: q.name, 
-                      image: q.image || null, 
-                      comedy: q.comedy, 
-                       design: q.design, 
-                       performance: q.performance, 
-                       acting: q.acting, 
-                       lip_sync: q.lip_sync || q.lipSync 
-                      })
-);          updateSetupUI();
+          state.queens = parsed.queens.map(q => ({ name: q.name, image: q.image || null, comedy: q.comedy, design: q.design, performance: q.performance, acting: q.acting, lip_sync: q.lip_sync || q.lipSync }));
+          updateSetupUI();
         } catch { alert("Could not parse file."); }
       };
       reader.readAsText(file);
       e.target.value = "";
     });
+    
     // File Exporter
     el.exportCastBtn.addEventListener("click", () => {
       if(!state.queens.length) return alert("No queens to export.");
       const blob = new Blob([JSON.stringify({ queens: state.queens }, null, 2)], { type: "application/json" });
       const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `drag_race_cast.json`; a.click();
     });
+    
     el.castPreview.addEventListener("click", (e) => {
       if (e.target.dataset.action === "remove-queen") {
         state.queens.splice(Number(e.target.dataset.index), 1); updateSetupUI();
       }
     });
+    
     updateSetupUI();
   </script>
 </body>
