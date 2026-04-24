@@ -332,6 +332,126 @@
     }
     .patch-notes-content ul { padding-left: 20px; color: var(--muted);
       line-height: 1.6;}
+/* --- TRACK RECORD TABLE (wiki-style) --- */
+.track-record-wrap {
+  overflow-x: auto;
+}
+
+.track-record-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  background: #fff;
+}
+
+.track-record-table th,
+.track-record-table td {
+  border: 1px solid #a2a9b1;
+  padding: 6px 8px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.1;
+}
+
+.track-record-table thead th {
+  background: #eaecf0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.track-record-table .rank-head {
+  width: 70px;
+}
+
+.track-record-table .queen-head {
+  min-width: 220px;
+  text-align: left;
+}
+
+.track-record-table .rank-cell {
+  background: #d9d9d9;
+  font-weight: 700;
+  width: 70px;
+  white-space: nowrap;
+}
+
+.track-record-table .queen-cell {
+  background: #f8f9fa;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.track-record-table .queen-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.track-record-table .queen-photo {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.track-record-table .queen-name {
+  font-weight: 700;
+}
+
+.track-record-table .placement-WIN {
+  background: #2b50aa;
+  color: #fff;
+  font-weight: 700;
+}
+
+.track-record-table .placement-HIGH {
+  background: #bfe1f6;
+  color: #000;
+  font-weight: 700;
+}
+
+.track-record-table .placement-SAFE {
+  background: #ffffff;
+  color: #000;
+}
+
+.track-record-table .placement-LOW {
+  background: #ffb6c1;
+  color: #000;
+}
+
+.track-record-table .placement-BTM2 {
+  background: #f88379;
+  color: #000;
+  font-weight: 700;
+}
+
+.track-record-table .placement-ELIM {
+  background: #a11f24;
+  color: #fff;
+  font-weight: 700;
+}
+
+.track-record-table .placement-EMPTY {
+  background: #d9d9d9;
+  color: #000;
+}
+/* --- PLACEMENT COLORS --- */
+.placement-WIN { background-color: #2b50aa; color: white; font-weight: bold; }
+.placement-HIGH { background-color: #add8e6; color: black; }
+.placement-SAFE { background-color: #ffffff; color: black; }
+.placement-LOW { background-color: #ffb6c1; color: black; }
+.placement-BTM2 { background-color: #f88379; color: black; }
+.placement-ELIM { background-color: #a11f24; color: white; font-weight: bold; }
+.placement-WINNER { background-color: #ffd700; color: black; font-weight: bold; }
+.placement-RUNNER-UP { background-color: #c0c0c0; color: black; font-weight: bold; }
+.placement-GUEST { background-color: #eaecf0; color: black; }
+.placement-EMPTY { background-color: #eaecf0; }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -2369,6 +2489,12 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               let ev1 = data.lipSync.performances[0]; let ev2 = data.lipSync.performances[1];
               let isDoubleShantay = (s1 >= 13 && s2 >= 13 && Math.random() < 0.1);
               let isDoubleSashay = (s1 <= 7 && s2 <= 7 && Math.random() < 0.02 && activeQueens().length > (state.finaleFormat === "top3" ? 4 : 5));
+
+              // Disable double outcomes for Tournament Of All Stars to preserve the 8-queen finale bracket
+              if (state.seasonFormat === "tournament-of-all-stars") {
+                  isDoubleShantay = false;
+                  isDoubleSashay = false;
+              }
               if (data.riggedOutcome) {
                    if (data.riggedOutcome === "w1") { w = ev1.queen; l = ev2.queen; isDoubleShantay=false; isDoubleSashay=false;}
                    if (data.riggedOutcome === "w2") { w = ev2.queen; l = ev1.queen; isDoubleShantay=false; isDoubleSashay=false;}
@@ -2581,14 +2707,11 @@ if (state.seasonFormat === "tournament-of-all-stars") {
     }
   }
     });
-    function makeMatch(q1, q2) {
+   function makeMatch(q1, q2) {
       // Calculate power based on track record, their lip sync stat, AND a large random factor
       let power1 = trackScore(q1) + (q1.record.WIN * 10) + (q1.stats.lipSync * 3) + (Math.random() * 40);
       let power2 = trackScore(q2) + (q2.record.WIN * 10) + (q2.stats.lipSync * 3) + (Math.random() * 40);
-      
-      return power1 >= power2 
-        ? { p1: q1, p2: q2, winner: q1, loser: q2 } 
-        : { p1: q1, p2: q2, winner: q2, loser: q1 };
+      return power1 >= power2 ? {winner: q1, loser: q2, p1: q1, p2: q2} : {winner: q2, loser: q1, p1: q1, p2: q2};
     }
 
     function startFinale() {
@@ -2693,10 +2816,10 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   <div class="label-row"><span class="pill">Round 1</span></div>
                   <p class="big-message">Quarter-Final Matchups</p>
                   <div class="flex-col-center" style="width:100%; gap:12px; margin-top:12px;">
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf1.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf1.loser.name)}</div></div>
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf2.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf2.loser.name)}</div></div>
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf3.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf3.loser.name)}</div></div>
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf4.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf4.loser.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf1.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf1.p2.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf2.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf2.p2.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf3.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf3.p2.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.qf4.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.qf4.p2.name)}</div></div>
                   </div>
                 </div>
               `;
@@ -2728,8 +2851,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   <div class="label-row"><span class="pill">Round 2</span></div>
                   <p class="big-message">Semi-Final Matchups</p>
                   <div class="flex-col-center" style="width:100%; gap:12px; margin-top:12px;">
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.sf1.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.sf1.loser.name)}</div></div>
-                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.sf2.winner.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.sf2.loser.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.sf1.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.sf1.p2.name)}</div></div>
+                    <div class="flex-center"><div class="placement-card bg-safe">${escapeHtml(f.sf2.p1.name)}</div> <span style="font-weight:900;">VS</span> <div class="placement-card bg-safe">${escapeHtml(f.sf2.p2.name)}</div></div>
                   </div>
                 </div>
               `;
@@ -2757,9 +2880,9 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   <p class="big-message">The Final Lip Sync</p>
                   <p class="muted">For the crown...</p>
                   <div class="flex-center" style="gap:24px; margin-top: 12px;">
-                    <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
+                    <div class="placement-card bg-safe">${escapeHtml(f.final.p1.name)}</div>
                     <p class="muted" style="font-weight:900;">VS</p>
-                    <div class="placement-card bg-safe">${escapeHtml(f.final.loser.name)}</div>
+                    <div class="placement-card bg-safe">${escapeHtml(f.final.p2.name)}</div>
                   </div>
                 </div>
               `;
