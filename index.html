@@ -337,6 +337,28 @@
   overflow-x: auto;
 }
 
+/* Logo & Banner Styling */
+.logo-wrapper {
+  background-color: var(--card); /* Uses your existing white card background */
+  padding: 16px;
+  border-radius: 20px; /* Gives it nice rounded corners */
+  box-shadow: var(--shadow); /* Uses your existing soft green shadow */
+  border: 2px solid var(--border); /* Matches your existing borders */
+  margin-bottom: 24px; /* Creates space between the image and the title */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Keeps the image neatly inside the curved borders */
+}
+
+.main-logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 250px; /* Prevents the image from getting too massive on big screens */
+  border-radius: 8px; /* Slightly rounds the image itself */
+  object-fit: cover;
+}
+
 .track-record-table {
   width: 100%;
   min-width: 900px;
@@ -458,6 +480,10 @@
 <body>
   <div class="app">
     <div class="hero">
+      <header class="header">
+        <div class="logo-wrapper">
+          <img src="banner.png" alt="Drag Race Simulator Banner" class="main-logo" />
+        </div>
       <h1 class="title">Greenroom Drag Race Simulator</h1>
       <p class="subtitle">Release v2.0.0 - Last Updated 17/4/26</p>
       
