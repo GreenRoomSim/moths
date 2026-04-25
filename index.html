@@ -244,6 +244,25 @@
       font-size: 14px; background: white; }
     .standings-table th { background: #f9fff5; padding: 12px 10px; border: 1px solid var(--border);
       font-weight: 700; text-align: center; font-size: 13px; }
+      .standings-table th.ep-challenge {
+      background: #f2ffe7;
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      padding: 5px 8px;
+    }
+    .standings-table th.ep-mini {
+      background: #f9fff5;
+      font-family: inherit;
+      font-weight: 400;
+      font-size: 10px;
+      font-style: italic;
+      color: var(--muted);
+      white-space: nowrap;
+      padding: 4px 8px;
+    }
     .standings-table td { padding: 10px; border: 1px solid var(--border);
       text-align: center; }
     .standings-table td.qname-cell { text-align: left; font-weight: 700; width: 30%;
@@ -578,6 +597,11 @@
               <li>Added All Stars 11 to Pre-Defined Casts</li>
               <li>Added Banner to top of screen</li>
             </ul>
+
+            <h3>v1.9.1 - Update</h3>
+            <ul>
+              <li>Added AS11 Cast Photos in Preperation for the v2.0 Update.</li>
+            </ul>            
 
             <h3>v1.9.0 - Update</h3>
             <ul>
@@ -975,7 +999,8 @@
       hasMidSeasonNonElim: false,
       // TOURNAMENT TRACKERS:
       tournamentPoints: {}, 
-      wildcardQueen: null
+      wildcardQueen: null,
+      episodeLog: []
     };
     
     const el = {
@@ -1185,7 +1210,7 @@
     function trackScore(q) { return (q.record.WIN * 5) + ((q.record.TOP2 || 0) * 4.5) + (q.record.HIGH * 4) + (q.record.SAFE * 3) + (q.record.LOW * 2) + (q.record.BTM2 * 1); }
 
     function getMiniChallenge(epNum, remaining) {
-      if (Math.random() > 0.7) return { none: true };
+      if (Math.random() > 0.4) return { none: true };
       let pool = miniChallenges.filter(c => !state.usedMinis.includes(c.name));
       const isLate = remaining <= 6; const isEarly = epNum <= 2;
       let valid = pool.filter(c => {
@@ -1803,11 +1828,14 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       el.screenCounterText.textContent = "";
       
       // Rig Button Toggle Logic
+      // Rig Button Toggle Logic
       el.rigGameBtn.classList.toggle("hidden", 
+          data.isTournamentBracket || // Ensures it stays hidden during bracket episodes
           (isGG && state.phase !== 4 && state.phase !== 6) ||
           (data.isLaLaPaRuza && state.phase !== 6) ||
           (isAssassin && state.phase !== 3 && state.phase !== 6) ||
-          (!isGG && !data.isLaLaPaRuza && !isAssassin && state.phase !== 3 && state.phase !== 5)
+          (data.isTournamentMerge && state.phase !== 4 && state.phase !== 6) || // Accounts for the Merge phase shift
+          (!isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && state.phase !== 3 && state.phase !== 5)
       );
       
       // Phase Translator mapping specifically to handle Girl Group shifts and Assassin shifts
@@ -2673,6 +2701,15 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
               return trackScore(b) - trackScore(a);
             });
+            // Log this episode's challenge names for the header
+            const _logIdx = state.episodeNumber - 1;
+            if (!state.episodeLog[_logIdx]) {
+              state.episodeLog[_logIdx] = {
+                challenge: (state.episodeData && state.episodeData.maxi) ? state.episodeData.maxi.name : "—",
+                mini: (state.episodeData && state.episodeData.mini && !state.episodeData.mini.none)
+                  ? state.episodeData.mini.challenge : "—"
+              };
+            }
             content = `
               <div class="section-card" style="text-align: left; padding: 24px;">
                 <div style="display:flex; gap: 8px; margin-bottom: 16px;">
@@ -2683,15 +2720,26 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   <table class="standings-table">
                     <thead>
                       <tr>
-                        <th>Queen</th>
+                        <th rowspan="3">Queen</th>
                         ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
-                        <th>Score</th>
+                        <th rowspan="3">Score</th>
+                      </tr>
+                      <tr>
+                        ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-challenge">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].challenge) : "—"}</th>`).join("")}
+                      </tr>
+                      <tr>
+                        ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-mini">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].mini) : "—"}</th>`).join("")}
                       </tr>
                     </thead>
                     <tbody>
                       ${sortedQueens.map(q => `
                         <tr>
-                          <td class="qname-cell">${escapeHtml(q.name)}</td>
+                          <td class="qname-cell">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                              <span>${escapeHtml(q.name)}</span>
+                              ${q.image ? `<img src="${q.image}" style="width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--border); flex-shrink:0;" onerror="this.style.display='none'">` : ""}
+                            </div>
+                          </td>
                           ${Array.from({length: state.episodeNumber}, (_, i) => {
                             let p = q.history[i];
                             if (!p) return `<td class="empty-cell"></td>`;
@@ -2964,15 +3012,26 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                     <table class="standings-table">
                       <thead>
                         <tr>
-                          <th>Queen</th>
+                          <th rowspan="3">Queen</th>
                           ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
-                          <th>Score</th>
+                          <th rowspan="3">Score</th>
+                        </tr>
+                        <tr>
+                          ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-challenge">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].challenge) : "—"}</th>`).join("")}
+                        </tr>
+                        <tr>
+                          ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-mini">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].mini) : "—"}</th>`).join("")}
                         </tr>
                       </thead>
                       <tbody>
                         ${sortedQueens.map(q => `
                           <tr>
-                            <td class="qname-cell">${escapeHtml(q.name)}</td>
+                            <td class="qname-cell">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                              <span>${escapeHtml(q.name)}</span>
+                              ${q.image ? `<img src="${q.image}" style="width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--border); flex-shrink:0;" onerror="this.style.display='none'">` : ""}
+                            </div>
+                          </td>
                             ${Array.from({length: state.episodeNumber}, (_, i) => {
                               let p = q.history[i];
                               if (!p) return `<td class="empty-cell"></td>`;
@@ -3003,8 +3062,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               }, 100);
               el.finaleBtn.textContent = "End Season";
           } else {
-              state.mode = "setup";
-              state.queens = []; updateSetupUI(); clearQueenForm(); renderAll(); return;
+            state.mode = "setup";
+            state.queens = []; updateSetupUI(); clearQueenForm(); renderAll(); return;
           }
       } else if (state.finaleFormat === "top4") {
           if (f.step === 1) {
@@ -3233,15 +3292,26 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                     <table class="standings-table">
                       <thead>
                         <tr>
-                          <th>Queen</th>
+                          <th rowspan="3">Queen</th>
                           ${Array.from({length: state.episodeNumber}, (_, i) => `<th>Ep ${i+1}</th>`).join("")}
-                          <th>Score</th>
+                          <th rowspan="3">Score</th>
+                        </tr>
+                        <tr>
+                          ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-challenge">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].challenge) : "—"}</th>`).join("")}
+                        </tr>
+                        <tr>
+                          ${Array.from({length: state.episodeNumber}, (_, i) => `<th class="ep-mini">${state.episodeLog[i] ? escapeHtml(state.episodeLog[i].mini) : "—"}</th>`).join("")}
                         </tr>
                       </thead>
                       <tbody>
                         ${sortedQueens.map(q => `
                           <tr>
-                            <td class="qname-cell">${escapeHtml(q.name)}</td>
+                            <td class="qname-cell">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                              <span>${escapeHtml(q.name)}</span>
+                              ${q.image ? `<img src="${q.image}" style="width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--border); flex-shrink:0;" onerror="this.style.display='none'">` : ""}
+                            </div>
+                          </td>
                             ${Array.from({length: state.episodeNumber}, (_, i) => {
                               let p = q.history[i];
                               if (!p) return `<td class="empty-cell"></td>`;
@@ -3282,6 +3352,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
     el.finaleBtn.addEventListener("click", () => { state.finaleData.step++; renderFinale(); });
     // --- RIGGORY SYSTEM LOGIC --- //
+    // --- RIGGORY SYSTEM LOGIC --- //
     el.rigGameBtn.addEventListener("click", () => {
         const p = state.episodeData.placements;
         let isTop2Format = (state.seasonFormat === "all-stars-legacy" || (state.episodeNumber === 1 && state.premiereFormat === "top2") || state.episodeData.isMidSeasonNonElim);
@@ -3289,37 +3360,21 @@ if (state.seasonFormat === "tournament-of-all-stars") {
         let html = "";
         const isGG = state.episodeData.isGirlGroup;
         const isLaLa = state.episodeData.isLaLaPaRuza;
+        const isMerge = state.episodeData.isTournamentMerge; // Add this variable
 
-        if ((isGG && state.phase === 4) || (!isGG && !isLaLa && state.phase === 3) || (isTop1Format && state.phase === 3)) {
+        // Update the Phase 3 / Phase 4 Judging checks
+        if ((isGG && state.phase === 4) || (isMerge && state.phase === 4) || (!isGG && !isLaLa && !isMerge && state.phase === 3) || (isTop1Format && state.phase === 3)) {
             let tops = isTop2Format ? [...p.topTwo, ...p.highQueens] : (isTop1Format ? [...p.topOne, ...p.highQueens] : [...p.winners, ...p.highQueens]);
             let bottoms = p.bottomThree ? [...p.bottomThree] : [...(p.savedLow ? [p.savedLow] : []), ...(p.bottomTwo || [])];
             
-            if (!isGG) {
-                if (isTop2Format) {
-                    html += `<label class="field" style="margin-bottom:8px;">Select Top 2 Queen 1: <select id="rigTop1">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-                    html += `<label class="field" style="margin-bottom:8px;">Select Top 2 Queen 2: <select id="rigTop2">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-                } else if (isTop1Format) {
-                    html += `<label class="field" style="margin-bottom:8px;">Select Top All Star: <select id="rigTop1">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-                } else {
-                    html += `<label class="field" style="margin-bottom:8px;">Select Winner: <select id="rigWin">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-                    if (p.winners && p.winners.length === 2) {
-                         html += `<label class="field" style="margin-bottom:8px;">Select Winner 2: <select id="rigWin2">${tops.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-                    }
-                }
-            } else {
-                html += `<p class="muted">Winning Team: <strong>${escapeHtml(state.episodeData.gg.winningName)}</strong></p>`;
-            }
+            // ... (Keep the rest of the dropdown HTML building code inside here exactly the same) ...
 
-            if (bottoms.length > 0 && bottoms.length > 2 && !(state.episodeNumber === 1 && state.premiereFormat === "top2") && !state.episodeData.isMidSeasonNonElim) {
-                 html += `<label class="field">Select Queen to Save: <select id="rigSave">${bottoms.map(q => `<option value="${q.id}">${q.name}</option>`).join('')}</select></label>`;
-            }
-            
-            el.rigModal.dataset.rigType = "ep3";
-            el.rigContent.innerHTML = html;
-            el.rigModal.classList.remove("hidden");
-        } else if ((isGG && state.phase === 6) || (isLaLa && state.phase === 6) || (isTop1Format && state.phase === 6) || (!isGG && !isLaLa && !isTop1Format && state.phase === 5)) {
+        // Update the Phase 5 / Phase 6 Lip Sync checks
+        } else if ((isGG && state.phase === 6) || (isLaLa && state.phase === 6) || (isTop1Format && state.phase === 6) || (isMerge && state.phase === 6) || (!isGG && !isLaLa && !isTop1Format && !isMerge && state.phase === 5)) {
             let p1, p2;
             let canDoubleSashay = false;
+            
+            // ... (Keep the rest of the Lip Sync rigging code inside here exactly the same) ...
             let isTop2LipSyncTrigger = false;
             
             if (isLaLa) {
