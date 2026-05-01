@@ -221,6 +221,8 @@
     .bg-dept { background: #e2a9f1 !important; color: #000000 !important; border: none; font-weight: bold; }
     .bg-disq { background: #484848 !important; color: #ffffff !important; border: none; font-weight: bold; }
     .bg-quit { background: #ff66a2 !important; color: #000000 !important; border: none; font-weight: bold; }
+    .bg-miss-con { background: #00ffff !important; color: #000000 !important; border: none; font-weight: bold; }
+    .bg-guest { background: #dcdcdc !important; color: #000000 !important; border: none; }
     
     /* Tournament of All Stars — expanded placements (use standard base colors) */
     .bg-t_win    { background: #00bfff !important; color: #000000 !important; border: none; font-weight: bold; } /* Top 2 standalone (no outcome yet) */
@@ -1482,7 +1484,7 @@
       usedMinis: [],
       usedMaxis: [],
       hasMidSeasonNonElim: false,
-      nonElimEnabled: true,
+      nonElimEnabled: false,
       deptEnabled: false,
       disqEnabled: false,
       quitEnabled: false,
@@ -1660,6 +1662,8 @@
         if (p === "DEPT")        return "bg-dept";
         if (p === "DISQ")        return "bg-disq";
         if (p === "QUIT")        return "bg-quit";
+        if (p === "MISS CON")    return "bg-miss-con";
+        if (p === "GUEST")       return "bg-guest";
         return `bg-${p.toLowerCase()}`;
     }
 
@@ -1676,6 +1680,8 @@
         if (p === "DEPT")        return "DEPT";
         if (p === "DISQ")        return "DISQ";
         if (p === "QUIT")        return "QUIT";
+        if (p === "MISS CON")    return "MISS CON";
+        if (p === "GUEST")       return "GUEST";
         return p;
     }
 
@@ -2222,7 +2228,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       }
 
       // DEPT Check — Regular season only, not premiere ep, and not a special episode type (those early-return above)
-      if (state.deptEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1) {
+      if (state.deptEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1 && activeQueens().length >= 6) {
           const ed = state.episodeData;
           if (ed && !ed.isLaLaPaRuza && !ed.isMidSeasonNonElim) {
               if (Math.random() < 0.01) {
@@ -2238,7 +2244,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       }
 
       // DISQ Check — Regular season only, not premiere, not special episode
-      if (state.disqEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1) {
+      if (state.disqEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1 && activeQueens().length >= 6) {
           const ed = state.episodeData;
           if (ed && !ed.isLaLaPaRuza && !ed.isMidSeasonNonElim && !ed.isDept) {
               if (Math.random() < 0.005) {
@@ -2254,7 +2260,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       }
 
       // QUIT Check — Regular season only, not premiere, not special episode, only once per season
-      if (state.quitEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1 && !state.hasQuit && !state.hasDept && !state.hasDisq) {
+      if (state.quitEnabled && state.seasonFormat === "regular" && state.episodeNumber > 1 && !state.hasQuit && !state.hasDept && !state.hasDisq && activeQueens().length >= 6) {
           const ed = state.episodeData;
           if (ed && !ed.isLaLaPaRuza && !ed.isMidSeasonNonElim && !ed.isDept && !ed.isDisq) {
               if (Math.random() < 0.02) {
@@ -3668,8 +3674,14 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           semi2.loser.history[epIndex] = "ELIM";
           final.loser.history[epIndex] = "RUNNER UP";
           final.winner.history[epIndex] = "WINNER";
+
+          // Miss Congeniality & Guest — all eliminated non-DISQ non-finalist queens attend the finale
+          const finalistIds4 = new Set(finalists.map(q => q.id));
+          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const missCon4 = misConPool4.length > 0 ? pick(misConPool4) : null;
+          misConPool4.forEach(q => { q.history[epIndex] = (missCon4 && q.id === missCon4.id) ? "MISS CON" : "GUEST"; });
           
-          state.finaleData = { step: 1, semi1, semi2, final };
+          state.finaleData = { step: 1, semi1, semi2, final, missCon: missCon4 };
       } else {
           const thirdPlace = finalists[2];
           const top2 = [finalists[0], finalists[1]];
@@ -3683,12 +3695,20 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           
           final.loser.history[epIndex] = "RUNNER UP";
           final.winner.history[epIndex] = "WINNER";
+
+          // Miss Congeniality & Guest
+          const finalistIds3 = new Set(finalists.map(q => q.id));
+          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const missCon3 = misConPool3.length > 0 ? pick(misConPool3) : null;
+          misConPool3.forEach(q => { q.history[epIndex] = (missCon3 && q.id === missCon3.id) ? "MISS CON" : "GUEST"; });
+
           state.finaleData = { 
               step: 1, 
               finalists: finalists,
               thirdPlace: thirdPlace,
               final: final,
-              lipSong: pick(lipSongs)
+              lipSong: pick(lipSongs),
+              missCon: missCon3
           };
       }
 
@@ -3707,8 +3727,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
       // Finale Rig Button toggle
       let isRigFinale = false;
-      if (state.finaleFormat === "top4" && [1, 3, 5].includes(f.step)) isRigFinale = true;
-      if (state.finaleFormat === "top3" && [1, 3].includes(f.step)) isRigFinale = true;
+      if (state.finaleFormat === "top4" && [4, 6].includes(f.step)) isRigFinale = true;
+      if (state.finaleFormat === "top3" && [4, 6].includes(f.step)) isRigFinale = true;
       if (state.seasonFormat === "tournament-of-all-stars" && [2, 4, 6].includes(f.step)) isRigFinale = true;
       el.rigFinaleBtn.classList.toggle("hidden", !isRigFinale);
 
@@ -3938,56 +3958,95 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           }
       } else if (state.finaleFormat === "top4") {
           if (f.step === 1) {
+            // Finale intro
+            const allFinaleQueens = state.queens.filter(q => !Object.values(q.history).includes("DISQ"));
             content = `
               <div class="section-card flex-col-center">
-                <div class="label-row"></div>
-                <p class="big-message">Semifinal 1 Matchup</p>
-                <div class="flex-center" style="gap:24px; margin-top: 12px;">
-                  <div class="placement-card bg-safe">${escapeHtml(f.semi1.winner.name)}</div>
-                  <p class="muted" style="font-weight:900;">VS</p>
-                  <div class="placement-card bg-safe">${escapeHtml(f.semi1.loser.name)}</div>
+                <div class="label-row"><span class="pill">Grand Finale</span></div>
+                <p class="big-message">It's the Grand Finale!</p>
+                <p class="muted">Four queens will compete for the crown in two lip sync showdowns. The winners face off in the ultimate final lip sync!</p>
+                <div class="flex-center" style="gap:12px; margin-top:16px;">
+                  ${f.semi1.p1 ? [f.semi1.p1, f.semi1.p2, f.semi2.p1, f.semi2.p2].map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("") : [f.semi1.winner, f.semi1.loser, f.semi2.winner, f.semi2.loser].map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                 </div>
               </div>
             `;
           } else if (f.step === 2) {
             content = `
               <div class="section-card flex-col-center">
-                <div class="label-row"></div>
-                <p class="big-message">Semifinal 1 Winner</p>
-                <div class="group-row" style="border:none;">
-                  <div class="placement-card bg-high">${escapeHtml(f.semi1.winner.name)}</div>
-                  <p class="muted" style="font-size:12px;">Eliminated: ${escapeHtml(f.semi1.loser.name)}</p>
-                </div>
+                <div class="label-row"><span class="pill" style="background:#00ffff; color:#000; border-color:#00ffff;">Miss Congeniality</span></div>
+                <p class="big-message" style="color:#00cccc;">The queens have voted…</p>
+                <p class="muted">Throughout this season, one queen has stood out for her warmth, kindness, and spirit. The queens have cast their votes for Miss Congeniality.</p>
+                <p class="muted" style="font-size:13px; margin-top:8px;">The winner is…</p>
               </div>
             `;
           } else if (f.step === 3) {
             content = `
               <div class="section-card flex-col-center">
-                <div class="label-row"></div>
-                <p class="big-message">Semifinal 2 Matchup</p>
-                <div class="flex-center" style="gap:24px; margin-top: 12px;">
-                  <div class="placement-card bg-safe">${escapeHtml(f.semi2.winner.name)}</div>
-                  <p class="muted" style="font-weight:900;">VS</p>
-                  <div class="placement-card bg-safe">${escapeHtml(f.semi2.loser.name)}</div>
-                </div>
+                <div class="label-row"><span class="pill" style="background:#00ffff; color:#000; border-color:#00ffff;">Miss Congeniality</span></div>
+                <p class="big-message" style="color:#00cccc;">Miss Congeniality</p>
+                ${f.missCon ? `
+                  <div class="placement-card bg-miss-con" style="font-size:18px; padding:16px 32px; margin-top:12px;">${escapeHtml(f.missCon.name)}</div>
+                  <p class="muted" style="margin-top:12px;">Congratulations — the queens have spoken!</p>
+                ` : `<p class="muted">No eligible queens for this award.</p>`}
               </div>
             `;
           } else if (f.step === 4) {
+            // Both semi matchups on one screen — rig button visible here
             content = `
               <div class="section-card flex-col-center">
-                <div class="label-row"></div>
-                <p class="big-message">Semifinal 2 Winner</p>
-                <div class="group-row" style="border:none;">
-                  <div class="placement-card bg-high">${escapeHtml(f.semi2.winner.name)}</div>
-                  <p class="muted" style="font-size:12px;">Eliminated: ${escapeHtml(f.semi2.loser.name)}</p>
+                <div class="label-row"><span class="pill">Top 4</span></div>
+                <p class="big-message">Tonight's Matchups</p>
+                <p class="muted" style="margin-bottom:16px;">Four queens, two lip syncs — only two will advance to the final!</p>
+                <div class="flex-col-center" style="width:100%; gap:16px;">
+                  <div class="group-row">
+                    <p class="muted" style="font-weight:800; margin:0;">Lip Sync 1</p>
+                    <div class="flex-center" style="gap:20px; margin-top:8px;">
+                      <div class="placement-card bg-safe">${escapeHtml(f.semi1.winner.name)}</div>
+                      <p class="muted" style="font-weight:900;">VS</p>
+                      <div class="placement-card bg-safe">${escapeHtml(f.semi1.loser.name)}</div>
+                    </div>
+                  </div>
+                  <div class="group-row" style="border:none;">
+                    <p class="muted" style="font-weight:800; margin:0;">Lip Sync 2</p>
+                    <div class="flex-center" style="gap:20px; margin-top:8px;">
+                      <div class="placement-card bg-safe">${escapeHtml(f.semi2.winner.name)}</div>
+                      <p class="muted" style="font-weight:900;">VS</p>
+                      <div class="placement-card bg-safe">${escapeHtml(f.semi2.loser.name)}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             `;
           } else if (f.step === 5) {
             content = `
               <div class="section-card flex-col-center">
-                <div class="label-row"></div>
-                <p class="big-message">The Final Lip Sync</p>
+                <div class="label-row"><span class="pill">Results</span></div>
+                <p class="big-message">The Top 2</p>
+                <p class="muted" style="margin-bottom:16px;">These queens won their lip syncs and advance to the final!</p>
+                <div class="flex-center" style="gap:16px; margin-bottom:20px;">
+                  <div class="group-row" style="align-items:center;">
+                    <p class="muted" style="font-size:12px; font-weight:700;">Lip Sync 1 Winner</p>
+                    <div class="placement-card bg-high">${escapeHtml(f.semi1.winner.name)}</div>
+                  </div>
+                  <div class="group-row" style="align-items:center; border:none;">
+                    <p class="muted" style="font-size:12px; font-weight:700;">Lip Sync 2 Winner</p>
+                    <div class="placement-card bg-high">${escapeHtml(f.semi2.winner.name)}</div>
+                  </div>
+                </div>
+                <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:4px 0 16px;">
+                <p class="muted">Sashay away…</p>
+                <div class="flex-center" style="gap:12px; margin-top:8px;">
+                  <div class="placement-card bg-elim">${escapeHtml(f.semi1.loser.name)}</div>
+                  <div class="placement-card bg-elim">${escapeHtml(f.semi2.loser.name)}</div>
+                </div>
+              </div>
+            `;
+          } else if (f.step === 6) {
+            // Final lip sync — rig button visible here
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill">The Final Lip Sync</span></div>
+                <p class="big-message">For the crown!</p>
                 <div class="flex-center" style="gap:24px; margin-top: 12px;">
                   <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
                   <p class="muted" style="font-weight:900;">VS</p>
@@ -3995,7 +4054,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 </div>
               </div>
             `;
-          } else if (f.step === 6) {
+          } else if (f.step === 7) {
             el.finaleBtn.classList.add("hidden");
             content = `
               <div class="flex-col-center" style="gap: 20px; padding: 24px 0;">
@@ -4024,7 +4083,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   el.finaleBtn.classList.remove("hidden");
               }
             }, 3000);
-          } else if (f.step === 7) {
+          } else if (f.step === 8) {
             let sortedQueens = [...state.queens].sort((a, b) => {
               if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
               return trackScore(b) - trackScore(a);
@@ -4097,72 +4156,106 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           }
       } else if (state.finaleFormat === "top3") {
           if (f.step === 1) {
-              content = `
-                <div class="section-card flex-col-center">
-                  <div class="label-row"></div>
-                  <p class="big-message">The Top 3</p>
-                  <p class="muted">Condragulations on making it to the finale! You've all performed exceptionally well all season, but unfortunately, one of you will not be making it to the final lip sync.</p>
-                  <div class="flex-center" style="gap:16px; margin-top: 12px;">
-                    ${f.finalists.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
-                  </div>
+            // Finale intro
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill">Grand Finale</span></div>
+                <p class="big-message">It's the Grand Finale!</p>
+                <p class="muted">Three queens remain, but only two will lip sync for the crown. Who will be this season's winner?</p>
+                <div class="flex-center" style="gap:16px; margin-top:16px;">
+                  ${f.finalists.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                 </div>
-              `;
+              </div>
+            `;
           } else if (f.step === 2) {
-              content = `
-                <div class="section-card flex-col-center">
-                  <div class="label-row"></div>
-                  <p class="big-message">A difficult decision...</p>
-                  <p class="muted">Based on your performances and track records all season...</p>
-                  <div class="group-row" style="border:none; margin-top: 16px;">
-                    <div class="placement-card bg-elim">${escapeHtml(f.thirdPlace.name)}</div>
-                    <p class="muted" style="margin-top: 8px;">I'm sorry my dear, but you will not be moving forward to the final lip sync. Sashay away.</p>
-                  </div>
-                </div>
-              `;
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill" style="background:#00ffff; color:#000; border-color:#00ffff;">Miss Congeniality</span></div>
+                <p class="big-message" style="color:#00cccc;">The queens have voted…</p>
+                <p class="muted">Throughout this season, one queen has stood out for her warmth, kindness, and spirit. The queens have cast their votes for Miss Congeniality.</p>
+                <p class="muted" style="font-size:13px; margin-top:8px;">The winner is…</p>
+              </div>
+            `;
           } else if (f.step === 3) {
-              content = `
-                <div class="section-card flex-col-center">
-                  <div class="label-row"></div>
-                  <p class="big-message">The Final Lip Sync</p>
-                  <p class="muted">Two queens stand before me. Prior to tonight, you were asked to prepare a lip sync performance to:</p>
-                  <p class="big-message" style="margin: 12px 0;">${escapeHtml(f.lipSong)}</p>
-                  <div class="flex-center" style="gap:24px; margin-top: 12px;">
-                    <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
-                    <p class="muted" style="font-weight:900;">VS</p>
-                    <div class="placement-card bg-safe">${escapeHtml(f.final.loser.name)}</div>
-                  </div>
-                </div>
-              `;
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill" style="background:#00ffff; color:#000; border-color:#00ffff;">Miss Congeniality</span></div>
+                <p class="big-message" style="color:#00cccc;">Miss Congeniality</p>
+                ${f.missCon ? `
+                  <div class="placement-card bg-miss-con" style="font-size:18px; padding:16px 32px; margin-top:12px;">${escapeHtml(f.missCon.name)}</div>
+                  <p class="muted" style="margin-top:12px;">Congratulations — the queens have spoken!</p>
+                ` : `<p class="muted">No eligible queens for this award.</p>`}
+              </div>
+            `;
           } else if (f.step === 4) {
-              el.finaleBtn.classList.add("hidden");
-              content = `
-                <div class="flex-col-center" style="gap: 20px; padding: 24px 0;">
-                  <div class="label-row"></div>
-                  <p class="big-message">The Winner of the season is...</p>
-                  <div id="loadingSpinner" style="height: 80px; display: grid; place-items: center;">
-                    <div class="spinner"></div>
-                  </div>
-                  <div id="winnerRevealBox" class="hidden flex-col-center" style="width:100%;">
-                      <div class="placement-card bg-winner" style="padding: 24px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 24px;">
-                        <p style="margin:0 0 8px; font-size:14px; font-weight:600; opacity:0.8;">WINNER</p>
-                        <p class="big-message" style="margin:0;">${escapeHtml(f.final.winner.name)}<span class="winner-crown">👑</span></p>
-                      </div>
-                      <div class="placement-card bg-runner" style="padding: 16px; width: 100%; max-width: 400px; border-radius: 16px;">
-                        <p style="margin:0 0 4px; font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
-                        <p style="margin:0; font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
-                      </div>
-                  </div>
+            // Show the top 3 — rig button visible here
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"></div>
+                <p class="big-message">The Top 3</p>
+                <p class="muted">Condragulations on making it to the finale! You've all performed exceptionally well all season, but unfortunately, one of you will not be making it to the final lip sync.</p>
+                <div class="flex-center" style="gap:16px; margin-top: 12px;">
+                  ${f.finalists.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}
                 </div>
-              `;
-              setTimeout(() => {
-                const spinner = document.getElementById("loadingSpinner");
-                const box = document.getElementById("winnerRevealBox");
-                if (spinner && box) {
-                    spinner.classList.add("hidden"); box.classList.remove("hidden");
-                    el.finaleBtn.classList.remove("hidden");
-                }
-              }, 3000);
+              </div>
+            `;
           } else if (f.step === 5) {
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"></div>
+                <p class="big-message">A difficult decision...</p>
+                <p class="muted">Based on your performances and track records all season...</p>
+                <div class="group-row" style="border:none; margin-top: 16px;">
+                  <div class="placement-card bg-elim">${escapeHtml(f.thirdPlace.name)}</div>
+                  <p class="muted" style="margin-top: 8px;">I'm sorry my dear, but you will not be moving forward to the final lip sync. Sashay away.</p>
+                </div>
+              </div>
+            `;
+          } else if (f.step === 6) {
+            // Final lip sync — rig button visible here
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"></div>
+                <p class="big-message">The Final Lip Sync</p>
+                <p class="muted">Two queens stand before me. Prior to tonight, you were asked to prepare a lip sync performance to:</p>
+                <p class="big-message" style="margin: 12px 0;">${escapeHtml(f.lipSong)}</p>
+                <div class="flex-center" style="gap:24px; margin-top: 12px;">
+                  <div class="placement-card bg-safe">${escapeHtml(f.final.winner.name)}</div>
+                  <p class="muted" style="font-weight:900;">VS</p>
+                  <div class="placement-card bg-safe">${escapeHtml(f.final.loser.name)}</div>
+                </div>
+              </div>
+            `;
+          } else if (f.step === 7) {
+            el.finaleBtn.classList.add("hidden");
+            content = `
+              <div class="flex-col-center" style="gap: 20px; padding: 24px 0;">
+                <div class="label-row"></div>
+                <p class="big-message">The Winner of the season is...</p>
+                <div id="loadingSpinner" style="height: 80px; display: grid; place-items: center;">
+                  <div class="spinner"></div>
+                </div>
+                <div id="winnerRevealBox" class="hidden flex-col-center" style="width:100%;">
+                    <div class="placement-card bg-winner" style="padding: 24px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 24px;">
+                      <p style="margin:0 0 8px; font-size:14px; font-weight:600; opacity:0.8;">WINNER</p>
+                      <p class="big-message" style="margin:0;">${escapeHtml(f.final.winner.name)}<span class="winner-crown">👑</span></p>
+                    </div>
+                    <div class="placement-card bg-runner" style="padding: 16px; width: 100%; max-width: 400px; border-radius: 16px;">
+                      <p style="margin:0 0 4px; font-size:12px; font-weight:600; opacity:0.8;">RUNNER UP</p>
+                      <p style="margin:0; font-weight:800; font-size: 16px;">${escapeHtml(f.final.loser.name)}</p>
+                    </div>
+                </div>
+              </div>
+            `;
+            setTimeout(() => {
+              const spinner = document.getElementById("loadingSpinner");
+              const box = document.getElementById("winnerRevealBox");
+              if (spinner && box) {
+                  spinner.classList.add("hidden"); box.classList.remove("hidden");
+                  el.finaleBtn.classList.remove("hidden");
+              }
+            }, 3000);
+          } else if (f.step === 8) {
               let sortedQueens = [...state.queens].sort((a, b) => {
                 if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
                 return trackScore(b) - trackScore(a);
@@ -4400,21 +4493,22 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 el.rigModal.dataset.rigType = "fin_toas_fin";
             }
         } else if (state.finaleFormat === "top4") {
-            if (f.step === 1) { 
-                html = `<label class="field">Winner of Semi 1: <select id="rigSemi1"><option value="${f.semi1.winner.id}">${f.semi1.winner.name}</option><option value="${f.semi1.loser.id}">${f.semi1.loser.name}</option></select></label>`;
-                el.rigModal.dataset.rigType = "fin_top4_s1";
-            } else if (f.step === 3) {
-                html = `<label class="field">Winner of Semi 2: <select id="rigSemi2"><option value="${f.semi2.winner.id}">${f.semi2.winner.name}</option><option value="${f.semi2.loser.id}">${f.semi2.loser.name}</option></select></label>`;
-                el.rigModal.dataset.rigType = "fin_top4_s2";
-            } else if (f.step === 5) {
+            if (f.step === 4) { 
+                html = `
+                  <p class="subtle" style="margin-bottom:8px;">Choose the winner of each semifinal lip sync.</p>
+                  <label class="field">Winner of Semi 1: <select id="rigSemi1"><option value="${f.semi1.winner.id}">${f.semi1.winner.name}</option><option value="${f.semi1.loser.id}">${f.semi1.loser.name}</option></select></label>
+                  <label class="field">Winner of Semi 2: <select id="rigSemi2"><option value="${f.semi2.winner.id}">${f.semi2.winner.name}</option><option value="${f.semi2.loser.id}">${f.semi2.loser.name}</option></select></label>
+                `;
+                el.rigModal.dataset.rigType = "fin_top4_both";
+            } else if (f.step === 6) {
                 html = `<label class="field">Season Winner: <select id="rigFin"><option value="${f.final.winner.id}">${f.final.winner.name}</option><option value="${f.final.loser.id}">${f.final.loser.name}</option></select></label>`;
                 el.rigModal.dataset.rigType = "fin_top4_fin";
             }
         } else if (state.finaleFormat === "top3") {
-            if (f.step === 1) { 
+            if (f.step === 4) { 
                 html = `<label class="field">Queen to Eliminate (3rd Place): <select id="rigThird">${f.finalists.map(q => `<option value="${q.id}" ${q.id === f.thirdPlace.id ? 'selected' : ''}>${q.name}</option>`).join('')}</select></label>`;
                 el.rigModal.dataset.rigType = "fin_top3_3rd";
-            } else if (f.step === 3) {
+            } else if (f.step === 6) {
                 html = `<label class="field">Season Winner: <select id="rigFin"><option value="${f.final.winner.id}">${f.final.winner.name}</option><option value="${f.final.loser.id}">${f.final.loser.name}</option></select></label>`;
                 el.rigModal.dataset.rigType = "fin_top3_fin";
             }
@@ -4498,7 +4592,36 @@ if (state.seasonFormat === "tournament-of-all-stars") {
         }
         else if (rt && rt.startsWith("fin_")) {
             const f = state.finaleData;
-            if (rt === "fin_top4_s1") {
+            if (rt === "fin_top4_both") {
+                // Rig both semis at once, then rebuild final
+                const finEpIdx = state.episodeNumber - 1;
+                let changed = false;
+                const wid1 = document.getElementById("rigSemi1").value;
+                const wid2 = document.getElementById("rigSemi2").value;
+                if (wid1 != f.semi1.winner.id) {
+                    f.final.loser.history[finEpIdx] = undefined;
+                    f.final.winner.history[finEpIdx] = undefined;
+                    f.semi1.winner.history[finEpIdx] = undefined;
+                    let temp = f.semi1.winner; f.semi1.winner = f.semi1.loser; f.semi1.loser = temp;
+                    f.semi1.loser.elimOrder = state.episodeNumber + 1; f.semi1.winner.elimOrder = 999;
+                    f.semi1.loser.history[finEpIdx] = "ELIM";
+                    changed = true;
+                }
+                if (wid2 != f.semi2.winner.id) {
+                    f.final.loser.history[finEpIdx] = undefined;
+                    f.final.winner.history[finEpIdx] = undefined;
+                    f.semi2.winner.history[finEpIdx] = undefined;
+                    let temp = f.semi2.winner; f.semi2.winner = f.semi2.loser; f.semi2.loser = temp;
+                    f.semi2.loser.elimOrder = state.episodeNumber + 1; f.semi2.winner.elimOrder = 999;
+                    f.semi2.loser.history[finEpIdx] = "ELIM";
+                    changed = true;
+                }
+                if (changed) {
+                    f.final = makeMatch(f.semi1.winner, f.semi2.winner);
+                    f.final.loser.elimOrder = state.episodeNumber + 2; f.final.winner.elimOrder = 999;
+                    f.final.loser.history[finEpIdx] = "RUNNER UP"; f.final.winner.history[finEpIdx] = "WINNER";
+                }
+            } else if (rt === "fin_top4_s1") {
                 let wid = document.getElementById("rigSemi1").value;
                 const finEpIdx = state.episodeNumber - 1;
                 if (wid != f.semi1.winner.id) {
