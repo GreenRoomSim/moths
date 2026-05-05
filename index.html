@@ -2670,7 +2670,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           totalScreens = 9;
       }
       if (data.isVoteReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isQuit) {
-          totalScreens = data.returnTieBreakerNeeded ? 11 : 10;
+          totalScreens = 10;
       }
       el.screenCounterText.textContent = "";
 
@@ -2735,9 +2735,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       if (data.isVoteReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && !data.isQuit) {
           if (state.phase === 7) phaseTag = "vote_return_announce";
           else if (state.phase === 8) phaseTag = "vote_return_votes";
-          else if (state.phase === 9) phaseTag = data.returnTieBreakerNeeded ? "vote_return_tie" : "return_reveal";
-          else if (state.phase === 10) phaseTag = data.returnTieBreakerNeeded ? "return_reveal" : 7;
-          else if (state.phase === 11) phaseTag = 7;
+          else if (state.phase === 9) phaseTag = "return_reveal";
+          else if (state.phase === 10) phaseTag = 7;
       }
 
       let content = "";
@@ -3763,6 +3762,10 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               </div>
             `;
           } else if (phaseTag === "vote_return_votes") {
+            // If a tie is unresolved, hide the Next button until the user picks
+            if (data.returnTieBreakerNeeded && !data.returnQueen) {
+              el.nextPhaseBtn.classList.add("hidden");
+            }
             content = `
               <div class="section-card">
                 <div class="label-row"><span class="pill" style="background:#ff943d; color:#000; border-color:#ff943d;">The Votes</span></div>
@@ -3778,13 +3781,37 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 </div>
                 <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:20px 0;">
                 ${data.returnTieBreakerNeeded ? `
-                  <div class="flex-col-center">
-                    <p class="muted" style="font-weight:800; color:var(--danger); font-size:18px;">⚠ It's a TIE!</p>
-                    <p class="muted" style="text-align:center;">The votes are tied between the following queens — you must settle it on the next screen.</p>
-                    <div class="flex-center" style="margin-top:12px; gap:10px; flex-wrap:wrap;">
+                  <div style="
+                    background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+                    border: 2px dashed var(--danger);
+                    border-radius: 20px;
+                    padding: 24px;
+                    text-align: center;
+                  ">
+                    <p style="margin:0 0 4px; font-size:13px; font-weight:800; letter-spacing:0.08em; color:var(--danger); text-transform:uppercase;">Dead Heat</p>
+                    <p style="margin:0 0 20px; font-size:24px; font-weight:900; color:#3d0000;">It's a Tie!</p>
+                    <p style="margin:0 0 20px; color:var(--muted); font-size:14px; max-width:380px; margin-left:auto; margin-right:auto;">The queens are deadlocked. Cast the deciding vote — which queen returns to the competition?</p>
+                    <div class="flex-center" style="gap:12px; flex-wrap:wrap; justify-content:center;">
                       ${data.returnTiedQueens.map(q => {
                         const vCount = data.returnVotes.find(v => v.queen.id === q.id).votes;
-                        return `<div class="placement-card bg-return">${escapeHtml(q.name)} — ${vCount} vote${vCount !== 1 ? "s" : ""}</div>`;
+                        return `
+                          <button
+                            onclick="window._voteReturnChoose('${q.id}')"
+                            class="tie-queen-btn"
+                            style="
+                              background: #fff;
+                              border: 2px solid var(--danger);
+                              border-radius: 18px;
+                              padding: 16px 24px;
+                              cursor: pointer;
+                              transition: all .15s;
+                              min-width: 160px;
+                              box-shadow: 0 4px 14px rgba(239,107,107,0.15);
+                            ">
+                            <div style="font-size:17px; font-weight:900; color:#3d0000; margin-bottom:4px;">${escapeHtml(q.name)}</div>
+                            <div style="font-size:12px; color:var(--muted);">${vCount} vote${vCount !== 1 ? "s" : ""}</div>
+                          </button>
+                        `;
                       }).join("")}
                     </div>
                   </div>
@@ -3793,28 +3820,6 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                     <p class="muted" style="font-weight:800; text-align:center;">The result is clear! The queen returning is...</p>
                   </div>
                 `}
-              </div>
-            `;
-          } else if (phaseTag === "vote_return_tie") {
-            // Hide Next button — user must pick a queen first
-            el.nextPhaseBtn.classList.add("hidden");
-            content = `
-              <div class="section-card flex-col-center">
-                <div class="label-row"><span class="pill" style="background:var(--danger); color:#fff; border-color:var(--danger);">Tie Breaker!</span></div>
-                <p class="big-message" style="color:var(--danger);">It's a Tie!</p>
-                <p class="muted" style="max-width:480px; text-align:center; margin-bottom:8px;">The queens are deadlocked. You must cast the deciding vote.</p>
-                <p class="muted" style="text-align:center; margin-bottom:24px; font-weight:700;">Which queen should return to the competition?</p>
-                <div class="flex-center" style="gap:16px; flex-wrap:wrap;">
-                  ${data.returnTiedQueens.map(q => `
-                    <button
-                      onclick="window._voteReturnChoose('${q.id}')"
-                      class="tie-queen-btn primary"
-                      style="padding:16px 28px; font-size:16px; min-width:150px; border-radius:16px;">
-                      ${escapeHtml(q.name)}
-                    </button>
-                  `).join("")}
-                </div>
-                <p class="muted" style="margin-top:20px; font-size:13px;">Select a queen above, then click Next to continue.</p>
               </div>
             `;
           } else if (phaseTag === 7) {
@@ -3901,7 +3906,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       if (state.episodeData.isTournamentMerge) totalPhases = 8;
       if (state.episodeData.isQuit && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin") totalPhases = 8;
       if (state.episodeData.isReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = 9;
-      if (state.episodeData.isVoteReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = state.episodeData.returnTieBreakerNeeded ? 11 : 10;
+      if (state.episodeData.isVoteReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = 10;
   }
 
   if (state.phase < totalPhases) { state.phase++; renderEpisode(); }
@@ -3924,12 +3929,16 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       // Disable all tie buttons visually
       document.querySelectorAll(".tie-queen-btn").forEach(btn => {
         btn.disabled = true;
-        btn.style.opacity = "0.45";
+        btn.style.opacity = "0.4";
+        btn.style.transform = "none";
       });
       // Highlight chosen button
       event.currentTarget.style.opacity = "1";
-      event.currentTarget.style.outline = "3px solid #ff943d";
-      event.currentTarget.style.outlineOffset = "2px";
+      event.currentTarget.style.background = "linear-gradient(135deg, #ffdddd, #ffbbbb)";
+      event.currentTarget.style.borderColor = "var(--danger)";
+      event.currentTarget.style.boxShadow = "0 0 0 3px rgba(239,107,107,0.35)";
+      event.currentTarget.style.transform = "scale(1.04)";
+      event.currentTarget.disabled = false;
       // Show the Next button so the user can proceed
       el.nextPhaseBtn.classList.remove("hidden");
     };
