@@ -5563,6 +5563,37 @@ window.resolveTournamentTie = function(queenId) {
         }, 0);
       }, true); // capture phase so it runs after the existing handler
 
+    // ── SESSION SAVE / RESTORE ──────────────────────────────────────────
+    // Saves state to sessionStorage before going to patchnotes.html so
+    // the player's season survives the round-trip and is restored on return.
+
+    const SAVE_KEY = "drSimState";
+
+    function saveSession() {
+      try { sessionStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+
+    function restoreSession() {
+      try {
+        const raw = sessionStorage.getItem(SAVE_KEY);
+        if (!raw) return;
+        sessionStorage.removeItem(SAVE_KEY); // consume once
+        const saved = JSON.parse(raw);
+        Object.assign(state, saved);
+        if (state.mode === "game" && state.episodeData) {
+          renderAll();
+          renderEpisode();
+        } else if (state.mode === "finale" && state.finaleData) {
+          renderFinale();
+        }
+      } catch(e) {}
+    }
+
+    const patchLink = document.querySelector('a[href="patchnotes.html"]');
+    if (patchLink) patchLink.addEventListener("click", saveSession);
+
+    restoreSession();
+
     })();
 
   </script>
