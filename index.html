@@ -1802,6 +1802,22 @@
       });
     }
 
+    // Helpers to detect DISQ/DEPT in history — handles both plain "DISQ"/"DEPT" and compound "WIN+DISQ" etc.
+    function hadDISQ(q) { return Object.values(q.history).some(h => h === "DISQ" || String(h).endsWith("+DISQ")); }
+    function hadDEPT(q) { return Object.values(q.history).some(h => h === "DEPT" || String(h).endsWith("+DEPT")); }
+
+    // Returns the original placement label (WIN/HIGH/SAFE/LOW/BTM2) for a queen
+    // given the episode's placements object — used to build compound DEPT/DISQ labels
+    function getOrigPlacement(queen, placements) {
+        if (!placements || !queen) return null;
+        if (placements.winners && placements.winners.some(q => q.id === queen.id)) return "WIN";
+        if (placements.highQueens && placements.highQueens.some(q => q.id === queen.id)) return "HIGH";
+        if (placements.savedLow && placements.savedLow.id === queen.id) return "LOW";
+        if (placements.pureSafe && placements.pureSafe.some(q => q.id === queen.id)) return "SAFE";
+        if (placements.bottomTwo && placements.bottomTwo.some(q => q.id === queen.id)) return "BTM2";
+        return null;
+    }
+
     function getTrackRecordClass(p) {
         if (!p) return "";
         if (p === "BTM2" || p === "BTM") return "bg-btm";
@@ -1819,8 +1835,8 @@
         if (p === "T_WIN2_ELIM") return "bg-t_win2_elim";
         if (p === "T_WIN_ELIM")  return "bg-t_win_elim";
         if (p === "RTRN")        return "bg-return";
-        if (p === "DEPT")        return "bg-dept";
-        if (p === "DISQ")        return "bg-disq";
+        if (p === "DEPT" || p.endsWith("+DEPT")) return "bg-dept";
+        if (p === "DISQ" || p.endsWith("+DISQ")) return "bg-disq";
         if (p === "QUIT")        return "bg-quit";
         if (p === "MISS CON")    return "bg-miss-con";
         if (p === "GUEST")       return "bg-guest";
@@ -1838,7 +1854,9 @@
         if (p === "T_WIN2_ELIM") return `<span class="compound-placement">WIN<br>+ ELIM</span>`;
         if (p === "T_WIN_ELIM")  return `<span class="compound-placement">WIN<br>+ ELIM</span>`;
         if (p === "DEPT")        return "DEPT";
+        if (p.endsWith("+DEPT")) { const orig = p.replace("+DEPT",""); return `<span class="compound-placement">${orig}<br>+ DEPT</span>`; }
         if (p === "DISQ")        return "DISQ";
+        if (p.endsWith("+DISQ")) { const orig = p.replace("+DISQ",""); return `<span class="compound-placement">${orig}<br>+ DISQ</span>`; }
         if (p === "QUIT")        return "QUIT";
         if (p === "MISS CON")    return "MISS CON";
         if (p === "GUEST")       return "GUEST";
@@ -2170,7 +2188,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       const mini = getMiniChallenge(state.episodeNumber, n);
       if (!mini.none) {
         mini.winners = [pick(actives)];
-        if (n > 5 && Math.random() < 0.5) mini.winners.push(pick(actives.filter(q => q.id !== mini.winners[0].id)));
+        if (n > 5 && Math.random() < 0.15) mini.winners.push(pick(actives.filter(q => q.id !== mini.winners[0].id)));
       }
 
       const maxi = getMaxiChallenge(state.episodeNumber, n);
@@ -2311,7 +2329,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
            };
           return;
       } else {
-          let winnerCount = (state.seasonFormat === "regular" && Math.random() < 0.05 && n >= 5) ? 2 : 1;
+          let winnerCount = (state.seasonFormat === "regular" && Math.random() < 0.03 && n >= 5) ? 2 : 1;
           scores.forEach((entry, idx) => {
               let label = "Okay";
               if (idx < winnerCount) label = "Slayed";
@@ -2455,8 +2473,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDISQ(q) &&
+                          !hadDEPT(q)
                       );
                       if (eligibleReturners.length > 0) {
                           const returnQueen = pick(eligibleReturners);
@@ -2484,8 +2502,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDISQ(q) &&
+                          !hadDEPT(q)
                       );
                       if (eligibleReturners.length > 0) {
                           const remainingQueens = activeQueens();
@@ -2532,8 +2550,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDISQ(q) &&
+                          !hadDEPT(q)
                       );
                       if (eligibleReturners.length > 0) {
                           ed.isChooseReturn = true;
@@ -3621,7 +3639,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   dq.record.ELIM += 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  dq.history[state.episodeNumber - 1] = "DEPT";
+                  const _deptOrig = getOrigPlacement(dq, data.placements);
+                  dq.history[state.episodeNumber - 1] = _deptOrig ? `${_deptOrig}+DEPT` : "DEPT";
                   data.elimination = { isDept: true, deptQueen: dq };
               // DISQ: disqualified queen departs — no one from BTM2 goes home
               } else if (data.isDisq) {
@@ -3629,7 +3648,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   dq.record.ELIM = (dq.record.ELIM || 0) + 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  dq.history[state.episodeNumber - 1] = "DISQ";
+                  const _disqOrig = getOrigPlacement(dq, data.placements);
+                  dq.history[state.episodeNumber - 1] = _disqOrig ? `${_disqOrig}+DISQ` : "DISQ";
                   // Both bottom 2 queens are safe — record BTM2 for both
                   const w = data.lipSync.winner.queen;
                   const l = data.lipSync.loser.queen;
@@ -4138,7 +4158,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
           // Miss Congeniality & Guest — all eliminated non-DISQ non-finalist queens attend the finale
           const finalistIds4 = new Set(finalists.map(q => q.id));
-          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !hadDISQ(q));
           const missCon4 = misConPool4.length > 0 ? pick(misConPool4) : null;
           misConPool4.forEach(q => { q.history[epIndex] = (missCon4 && q.id === missCon4.id) ? "MISS CON" : "GUEST"; });
           
@@ -4159,7 +4179,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
           // Miss Congeniality & Guest
           const finalistIds3 = new Set(finalists.map(q => q.id));
-          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !hadDISQ(q));
           const missCon3 = misConPool3.length > 0 ? pick(misConPool3) : null;
           misConPool3.forEach(q => { q.history[epIndex] = (missCon3 && q.id === missCon3.id) ? "MISS CON" : "GUEST"; });
 
@@ -4413,7 +4433,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       } else if (state.finaleFormat === "top4") {
           if (f.step === 1) {
             // Finale intro
-            const allFinaleQueens = state.queens.filter(q => !Object.values(q.history).includes("DISQ"));
+            const allFinaleQueens = state.queens.filter(q => !hadDISQ(q));
             content = `
               <div class="section-card flex-col-center">
                 <div class="label-row"><span class="pill">Grand Finale</span></div>
