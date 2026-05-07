@@ -2191,11 +2191,17 @@ if (state.seasonFormat === "tournament-of-all-stars") {
           let asHighQueens = [];
           let asBottomTwo = [];
           let asSavedLow = null;
+          let isBtm3 = false;
           if (n <= 4) {
               asBottomTwo = scores.slice(1).map(s => s.queen);
           } else {
               asHighQueens = [scores[1].queen, scores[2].queen];
-              if (n > 6) {
+              if (n > 7 && Math.random() < 0.25) {
+                  // BTM3: all three bottom queens are up for elimination, no saved low
+                  isBtm3 = true;
+                  asBottomTwo = [scores[n-3].queen, scores[n-2].queen, scores[n-1].queen];
+                  asSavedLow = null;
+              } else if (n > 6) {
                   asBottomTwo = [scores[n-2].queen, scores[n-1].queen];
                   asSavedLow = scores[n-3].queen;
               } else {
@@ -2249,6 +2255,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               mini, maxi, categories, scores,
               placements: { topOne, highQueens: asHighQueens, pureSafe: asPureSafe, savedLow: asSavedLow, bottomTwo: asBottomTwo, winners: [] },
               lsaData: { lsa: lsaQueenObj, topChoice, groupChoice, isTie, votes, tieBreakerNeeded: false },
+              isBtm3,
               countsApplied: false, lipSync: null, elimination: null, riggedOutcome: null, tieBreakApplied: false
            };
           return;
@@ -4937,6 +4944,29 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 p.savedLow = bottoms.find(q => q.id == s);
                 p.bottomTwo = bottoms.filter(q => q.id != s);
             }
+
+            // LSA: re-sync topChoice & groupChoice to the updated bottomTwo
+            // so a rigged-safe queen can never still be eliminated
+            if (state.seasonFormat === "all-stars-assassin") {
+                const newBtm = state.episodeData.placements.bottomTwo;
+                state.episodeData.lsaData.topChoice = newBtm[Math.floor(Math.random() * newBtm.length)];
+                const topOneId = state.episodeData.placements.topOne[0].id;
+                const groupVoters = activeQueens().filter(q => q.id !== topOneId);
+                const newVotes = {};
+                newBtm.forEach(q => { newVotes[q.id] = 0; });
+                groupVoters.forEach(() => { newVotes[newBtm[Math.floor(Math.random() * newBtm.length)].id]++; });
+                let maxV = 0, newGroupChoice = [];
+                for (let id in newVotes) {
+                    if (newVotes[id] > maxV) { maxV = newVotes[id]; newGroupChoice = [newBtm.find(q => q.id == id)]; }
+                    else if (newVotes[id] === maxV) { newGroupChoice.push(newBtm.find(q => q.id == id)); }
+                }
+                state.episodeData.lsaData.groupChoice = newGroupChoice;
+                state.episodeData.lsaData.isTie = newGroupChoice.length > 1;
+                state.episodeData.lsaData.votes = newVotes;
+                state.episodeData.elimination = null;
+                state.episodeData.lsaData.tieBreakerNeeded = false;
+                state.episodeData.tieBreakApplied = false;
+            }
             
             state.episodeData.countsApplied = false;
             renderEpisode();
@@ -5564,51 +5594,28 @@ window.resolveTournamentTie = function(queenId) {
       }, true); // capture phase so it runs after the existing handler
 
     // ── SESSION SAVE / RESTORE ──────────────────────────────────────────
-    // Uses localStorage (not sessionStorage — unreliable on iOS Safari).
-    // Saves on both link-click AND pagehide so mobile navigation is covered.
-    // State is stamped with a timestamp and discarded if older than 2 hours.
-
-    const SAVE_KEY   = "drSimState";
-    const SAVE_TTL   = 2 * 60 * 60 * 1000; // 2 hours in ms
-
+    const SAVE_KEY = "drSimState";
+    const SAVE_TTL = 2 * 60 * 60 * 1000;
     function saveSession() {
-      if (state.mode === "setup") return; // nothing worth saving on setup screen
-      try {
-        const payload = Object.assign({}, state, { _savedAt: Date.now() });
-        localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
-      } catch(e) {}
+      if (state.mode === "setup") return;
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(Object.assign({}, state, { _savedAt: Date.now() }))); } catch(e) {}
     }
-
     function restoreSession() {
       try {
         const raw = localStorage.getItem(SAVE_KEY);
         if (!raw) return;
         const saved = JSON.parse(raw);
-        // Discard stale saves
-        if (!saved._savedAt || (Date.now() - saved._savedAt) > SAVE_TTL) {
-          localStorage.removeItem(SAVE_KEY);
-          return;
-        }
-        localStorage.removeItem(SAVE_KEY); // consume — restore only once
+        if (!saved._savedAt || (Date.now() - saved._savedAt) > SAVE_TTL) { localStorage.removeItem(SAVE_KEY); return; }
+        localStorage.removeItem(SAVE_KEY);
         delete saved._savedAt;
         Object.assign(state, saved);
-        if (state.mode === "game" && state.episodeData) {
-          renderAll();
-          renderEpisode();
-        } else if (state.mode === "finale" && state.finaleData) {
-          renderFinale();
-        }
+        if (state.mode === "game" && state.episodeData) { renderAll(); renderEpisode(); }
+        else if (state.mode === "finale" && state.finaleData) { renderFinale(); }
       } catch(e) {}
     }
-
-    // Save when clicking the patch notes link
     const patchLink = document.querySelector('a[href="patchnotes.html"]');
     if (patchLink) patchLink.addEventListener("click", saveSession);
-
-    // pagehide fires reliably on iOS/Android when navigating away
     window.addEventListener("pagehide", saveSession);
-
-    // Restore on load
     restoreSession();
 
     })();
