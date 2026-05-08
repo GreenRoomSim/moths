@@ -579,6 +579,111 @@
       max-height: 80vh; overflow-y: auto;
     }
 
+/* ── Premiere Intro Screens ── */
+.season-intro-card {
+  text-align: center;
+  padding: 48px 32px;
+  background: linear-gradient(135deg, #f0fff5, #e0ffd0);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.season-intro-card .intro-pill {
+  display: inline-block;
+  background: var(--lime);
+  color: #14380e;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.season-intro-card .intro-headline {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+  line-height: 1.1;
+}
+.season-intro-card .intro-subtext {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 0;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+.season-intro-card .intro-crown {
+  font-size: 52px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* Werk Room */
+.werkroom-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+.werkroom-queen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 10px 12px;
+  border-radius: 18px;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(76,110,50,0.07);
+  opacity: 0;
+  transform: translateY(22px) scale(0.93);
+  transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1), transform 0.38s cubic-bezier(0.22,1,0.36,1);
+}
+.werkroom-queen.entered {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.werkroom-queen .wq-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--lime);
+  background: #e8f5e0;
+  flex-shrink: 0;
+}
+.werkroom-queen .wq-avatar-placeholder {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lime-2), var(--lime-3));
+  border: 2px solid var(--lime);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: #14380e;
+  flex-shrink: 0;
+}
+.werkroom-queen .wq-name {
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.25;
+  color: var(--ink);
+  word-break: break-word;
+}
+.werkroom-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.werkroom-header .big-message {
+  margin-bottom: 4px;
+}
+
 /* --- TRACK RECORD TABLE (wiki-style) --- */
 .track-record-wrap {
   overflow-x: auto;
@@ -1802,22 +1907,6 @@
       });
     }
 
-    // Helpers to detect DISQ/DEPT in history — handles both plain "DISQ"/"DEPT" and compound "WIN+DISQ" etc.
-    function hadDISQ(q) { return Object.values(q.history).some(h => h === "DISQ" || String(h).endsWith("+DISQ")); }
-    function hadDEPT(q) { return Object.values(q.history).some(h => h === "DEPT" || String(h).endsWith("+DEPT")); }
-
-    // Returns the original placement label (WIN/HIGH/SAFE/LOW/BTM2) for a queen
-    // given the episode's placements object — used to build compound DEPT/DISQ labels
-    function getOrigPlacement(queen, placements) {
-        if (!placements || !queen) return null;
-        if (placements.winners && placements.winners.some(q => q.id === queen.id)) return "WIN";
-        if (placements.highQueens && placements.highQueens.some(q => q.id === queen.id)) return "HIGH";
-        if (placements.savedLow && placements.savedLow.id === queen.id) return "LOW";
-        if (placements.pureSafe && placements.pureSafe.some(q => q.id === queen.id)) return "SAFE";
-        if (placements.bottomTwo && placements.bottomTwo.some(q => q.id === queen.id)) return "BTM2";
-        return null;
-    }
-
     function getTrackRecordClass(p) {
         if (!p) return "";
         if (p === "BTM2" || p === "BTM") return "bg-btm";
@@ -1835,8 +1924,8 @@
         if (p === "T_WIN2_ELIM") return "bg-t_win2_elim";
         if (p === "T_WIN_ELIM")  return "bg-t_win_elim";
         if (p === "RTRN")        return "bg-return";
-        if (p === "DEPT" || p.endsWith("+DEPT")) return "bg-dept";
-        if (p === "DISQ" || p.endsWith("+DISQ")) return "bg-disq";
+        if (p === "DEPT")        return "bg-dept";
+        if (p === "DISQ")        return "bg-disq";
         if (p === "QUIT")        return "bg-quit";
         if (p === "MISS CON")    return "bg-miss-con";
         if (p === "GUEST")       return "bg-guest";
@@ -1854,9 +1943,7 @@
         if (p === "T_WIN2_ELIM") return `<span class="compound-placement">WIN<br>+ ELIM</span>`;
         if (p === "T_WIN_ELIM")  return `<span class="compound-placement">WIN<br>+ ELIM</span>`;
         if (p === "DEPT")        return "DEPT";
-        if (p.endsWith("+DEPT")) { const orig = p.replace("+DEPT",""); return `<span class="compound-placement">${orig}<br>+ DEPT</span>`; }
         if (p === "DISQ")        return "DISQ";
-        if (p.endsWith("+DISQ")) { const orig = p.replace("+DISQ",""); return `<span class="compound-placement">${orig}<br>+ DISQ</span>`; }
         if (p === "QUIT")        return "QUIT";
         if (p === "MISS CON")    return "MISS CON";
         if (p === "GUEST")       return "GUEST";
@@ -2473,8 +2560,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !hadDISQ(q) &&
-                          !hadDEPT(q)
+                          !Object.values(q.history).includes("DISQ") &&
+                          !Object.values(q.history).includes("DEPT")
                       );
                       if (eligibleReturners.length > 0) {
                           const returnQueen = pick(eligibleReturners);
@@ -2502,8 +2589,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !hadDISQ(q) &&
-                          !hadDEPT(q)
+                          !Object.values(q.history).includes("DISQ") &&
+                          !Object.values(q.history).includes("DEPT")
                       );
                       if (eligibleReturners.length > 0) {
                           const remainingQueens = activeQueens();
@@ -2550,8 +2637,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !hadDISQ(q) &&
-                          !hadDEPT(q)
+                          !Object.values(q.history).includes("DISQ") &&
+                          !Object.values(q.history).includes("DEPT")
                       );
                       if (eligibleReturners.length > 0) {
                           ed.isChooseReturn = true;
@@ -2782,9 +2869,94 @@ if (state.seasonFormat === "tournament-of-all-stars") {
     el.rigGameBtn.classList.add("hidden");
 }
 
+    // Returns true for formats that get premiere intro screens
+    function showsPremiereIntro() {
+      return state.episodeNumber === 1 &&
+        ["regular", "all-stars-legacy", "all-stars-assassin"].includes(state.seasonFormat);
+    }
+
     function renderEpisode() {
       const active = activeQueens();
       const data = state.episodeData;
+
+      // ── Premiere intro screens: Season Intro (phase 1) & Werk Room (phase 2) ──
+      if (showsPremiereIntro() && state.phase <= 2) {
+        el.rigGameBtn.classList.add("hidden");
+        el.screenCounterText.textContent = "";
+        el.nextPhaseBtn.classList.remove("hidden");
+
+        if (state.phase === 1) {
+          // ── Screen 1: Season Welcome ──
+          el.gameHeader.textContent = "A Brand New Season!";
+          el.gameMeta.textContent = `${state.queens.length} queens are ready to compete`;
+          el.nextPhaseBtn.textContent = "Let's Go! →";
+          el.nextPhaseBtn.disabled = false;
+
+          const formatLabels = {
+            "regular": "Drag Race",
+            "all-stars-legacy": "All Stars: Lip Sync for Your Legacy",
+            "all-stars-assassin": "All Stars: Lip Sync Assassin"
+          };
+          const fmtLabel = formatLabels[state.seasonFormat] || "Drag Race";
+
+          el.gameContent.innerHTML = `
+            <div class="season-intro-card">
+              <span class="intro-crown">👑</span>
+              <div class="intro-pill">Season Premiere</div>
+              <h2 class="intro-headline">Welcome to<br>Drag Race Simulator!</h2>
+              <p class="intro-subtext">
+                A brand new season of <strong>${escapeHtml(fmtLabel)}</strong> is about to begin.
+                ${state.queens.length} fierce queens have arrived, ready to strut, slay, and compete for the crown.
+                <br><br>Are you ready? Then let's get this party started!
+              </p>
+            </div>
+          `;
+        } else {
+          // ── Screen 2: Werk Room entrances ──
+          el.gameHeader.textContent = "The Werk Room";
+          el.gameMeta.textContent = `${state.queens.length} queens enter…`;
+          el.nextPhaseBtn.textContent = "Continue";
+          el.nextPhaseBtn.disabled = true; // re-enabled after all queens enter
+
+          const queenCards = state.queens.map((q, i) => {
+            const avatarHtml = q.image
+              ? `<img class="wq-avatar" src="${escapeHtml(q.image)}" alt="${escapeHtml(q.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="wq-avatar-placeholder" style="display:none;">${escapeHtml(q.name.charAt(0))}</div>`
+              : `<div class="wq-avatar-placeholder">${escapeHtml(q.name.charAt(0))}</div>`;
+            return `<div class="werkroom-queen" data-qid="${i}">${avatarHtml}<span class="wq-name">${escapeHtml(q.name)}</span></div>`;
+          }).join("");
+
+          el.gameContent.innerHTML = `
+            <div class="werkroom-header">
+              <p class="big-message" style="margin-bottom:6px;">The Werk Room</p>
+              <p class="muted">The queens have arrived. Let's meet this season's cast!</p>
+            </div>
+            <div class="werkroom-wrap" id="werkroomGrid">${queenCards}</div>
+          `;
+
+          // Stagger entrance animations — total ≤ 5 s
+          const n = state.queens.length;
+          const intervalMs = Math.min(360, 4600 / n);
+          state.queens.forEach((_, i) => {
+            setTimeout(() => {
+              const card = el.gameContent.querySelector(`.werkroom-queen[data-qid="${i}"]`);
+              if (card) card.classList.add("entered");
+              if (i === n - 1) {
+                // All queens have entered — enable Next
+                setTimeout(() => { el.nextPhaseBtn.disabled = false; }, 280);
+              }
+            }, 300 + i * intervalMs);
+          });
+        }
+        return; // Early return — skip all normal episode rendering
+      }
+
+      // For eligible formats on episode 1, shift phase back by 2 so the rest of
+      // this function sees the standard 1–7 phase numbers it already expects.
+      const introOffset = showsPremiereIntro() ? 2 : 0;
+      if (introOffset) state.phase -= introOffset;
+
+      // ── Normal episode rendering (all existing logic below unchanged) ──
+
       const isGG = data.isGirlGroup;
       const isAssassin = state.seasonFormat === "all-stars-assassin";
       
@@ -3639,8 +3811,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   dq.record.ELIM += 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  const _deptOrig = getOrigPlacement(dq, data.placements);
-                  dq.history[state.episodeNumber - 1] = _deptOrig ? `${_deptOrig}+DEPT` : "DEPT";
+                  dq.history[state.episodeNumber - 1] = "DEPT";
                   data.elimination = { isDept: true, deptQueen: dq };
               // DISQ: disqualified queen departs — no one from BTM2 goes home
               } else if (data.isDisq) {
@@ -3648,8 +3819,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                   dq.record.ELIM = (dq.record.ELIM || 0) + 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  const _disqOrig = getOrigPlacement(dq, data.placements);
-                  dq.history[state.episodeNumber - 1] = _disqOrig ? `${_disqOrig}+DISQ` : "DISQ";
+                  dq.history[state.episodeNumber - 1] = "DISQ";
                   // Both bottom 2 queens are safe — record BTM2 for both
                   const w = data.lipSync.winner.queen;
                   const l = data.lipSync.loser.queen;
@@ -4083,6 +4253,9 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       } else {
         el.nextPhaseBtn.textContent = "Next";
       }
+
+      // Restore the phase offset we applied at the start for premiere intro formats
+      if (introOffset) state.phase += introOffset;
     }
 
     el.nextPhaseBtn.addEventListener("click", () => {
@@ -4100,6 +4273,8 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       if (state.episodeData.isReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = 9;
       if (state.episodeData.isVoteReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = 10;
       if (state.episodeData.isChooseReturn && !state.episodeData.isGirlGroup && !state.episodeData.isLaLaPaRuza && state.seasonFormat !== "all-stars-assassin" && !state.episodeData.isQuit) totalPhases = 10;
+      // Premiere intro screens add 2 phases to episode 1 for eligible formats
+      if (showsPremiereIntro()) totalPhases += 2;
   }
 
   if (state.phase < totalPhases) { state.phase++; renderEpisode(); }
@@ -4158,7 +4333,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
           // Miss Congeniality & Guest — all eliminated non-DISQ non-finalist queens attend the finale
           const finalistIds4 = new Set(finalists.map(q => q.id));
-          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !hadDISQ(q));
+          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !Object.values(q.history).includes("DISQ"));
           const missCon4 = misConPool4.length > 0 ? pick(misConPool4) : null;
           misConPool4.forEach(q => { q.history[epIndex] = (missCon4 && q.id === missCon4.id) ? "MISS CON" : "GUEST"; });
           
@@ -4179,7 +4354,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 
           // Miss Congeniality & Guest
           const finalistIds3 = new Set(finalists.map(q => q.id));
-          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !hadDISQ(q));
+          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !Object.values(q.history).includes("DISQ"));
           const missCon3 = misConPool3.length > 0 ? pick(misConPool3) : null;
           misConPool3.forEach(q => { q.history[epIndex] = (missCon3 && q.id === missCon3.id) ? "MISS CON" : "GUEST"; });
 
@@ -4433,7 +4608,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
       } else if (state.finaleFormat === "top4") {
           if (f.step === 1) {
             // Finale intro
-            const allFinaleQueens = state.queens.filter(q => !hadDISQ(q));
+            const allFinaleQueens = state.queens.filter(q => !Object.values(q.history).includes("DISQ"));
             content = `
               <div class="section-card flex-col-center">
                 <div class="label-row"><span class="pill">Grand Finale</span></div>
@@ -4460,7 +4635,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 <p class="big-message" style="color:#00cccc;">Miss Congeniality</p>
                 ${f.missCon ? `
                   <div class="placement-card bg-miss-con" style="font-size:18px; padding:16px 32px; margin-top:12px;">${escapeHtml(f.missCon.name)}</div>
-                  <p class="muted" style="margin-top:12px;">Congratulations — the queens have spoken!</p>
+                  <p class="muted" style="margin-top:12px;">Condragulations! The queens have spoken!</p>
                 ` : `<p class="muted">No eligible queens for this award.</p>`}
               </div>
             `;
