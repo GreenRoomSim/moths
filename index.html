@@ -1145,7 +1145,7 @@
           <img src="banner.png" alt="Drag Race Simulator Banner" class="main-logo" />
         </div>
       <h1 class="title">Greenroom Drag Race Simulator</h1>
-      <p class="subtitle" id="secretTrigger">V2.1 - Last Updated 7/5/26</p>
+      <p class="subtitle" id="secretTrigger">V2.2 - Last Updated 12/5/26</p>
 
     <!-- Debug Code Entry Modal -->
     <div id="debugCodeModal" class="modal hidden">
@@ -1222,7 +1222,7 @@
       
       <div class="button-row" style="margin-top: 16px;">
         <button id="preDefBtn" class="primary" style="padding: 8px 16px; font-size: 14px;">Pre-Defined Casts</button>
-        <a href="patchnotes.html" class="secondary" style="padding: 8px 16px; font-size: 14px; text-decoration: none; border-radius: 16px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center;">View Patch Notes</a>
+        <a href="patchnotes.html" class="secondary" style="padding: 8px 16px; font-size: 14px; text-decoration: none; border-radius: 16px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center;">View Update Log</a>
         <button id="suggestBtn" class="secondary" style="padding: 8px 16px; font-size: 14px;">Suggest a Feature / Report Bug</button>
       </div>
     </div>
@@ -1931,6 +1931,20 @@
       });
     }
 
+    // Returns the queen's original competitive placement (WIN/HIGH/SAFE/LOW)
+    // used when they were DEPT'd or DISQ'd that episode.
+    function getQueenOriginalPlacement(queen, placements) {
+        const isIn = (arr) => arr && arr.some(q => q.id === queen.id);
+        if (isIn(placements.topOne) || isIn(placements.winners)) return "WIN";
+        if (isIn(placements.highQueens)) return "HIGH";
+        if (placements.savedLow && placements.savedLow.id === queen.id) return "LOW";
+        return "SAFE";
+    }
+
+    // Checks if a queen's history contains a DEPT or DISQ entry (handles compound format like "HIGH|DEPT")
+    function hadDept(q) { return Object.values(q.history).some(v => v === "DEPT" || (v && v.endsWith("|DEPT"))); }
+    function hadDisq(q) { return Object.values(q.history).some(v => v === "DISQ" || (v && v.endsWith("|DISQ"))); }
+
     function getTrackRecordClass(p) {
         if (!p) return "";
         if (p === "BTM2" || p === "BTM") return "bg-btm";
@@ -1948,8 +1962,8 @@
         if (p === "T_WIN2_ELIM") return "bg-t_win2_elim";
         if (p === "T_WIN_ELIM")  return "bg-t_win_elim";
         if (p === "RTRN")        return "bg-return";
-        if (p === "DEPT")        return "bg-dept";
-        if (p === "DISQ")        return "bg-disq";
+        if (p === "DEPT" || (p && p.endsWith("|DEPT"))) return "bg-dept";
+        if (p === "DISQ" || (p && p.endsWith("|DISQ"))) return "bg-disq";
         if (p === "QUIT")        return "bg-quit";
         if (p === "MISS CON")    return "bg-miss-con";
         if (p === "GUEST")       return "bg-guest";
@@ -1969,6 +1983,14 @@
         if (p === "T_WIN_ELIM")  return `<span class="compound-placement">WIN<br>+ ELIM</span>`;
         if (p === "DEPT")        return "DEPT";
         if (p === "DISQ")        return "DISQ";
+        if (p && p.endsWith("|DEPT")) {
+            const orig = p.split("|")[0];
+            return `<span class="compound-placement">${orig}<br>+<br>DEPT</span>`;
+        }
+        if (p && p.endsWith("|DISQ")) {
+            const orig = p.split("|")[0];
+            return `<span class="compound-placement">${orig}<br>+<br>DISQ</span>`;
+        }
         if (p === "QUIT")        return "QUIT";
         if (p === "MISS CON")    return "MISS CON";
         if (p === "GUEST")       return "GUEST";
@@ -2638,11 +2660,9 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDisq(q) &&
+                          !hadDept(q)
                       );
-                      if (eligibleReturners.length > 0) {
-                          const returnQueen = pick(eligibleReturners);
                           ed.isReturn = true;
                           ed.returnQueen = returnQueen;
                           ed.returnApplied = false;
@@ -2667,8 +2687,8 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDisq(q) &&
+                          !hadDept(q)
                       );
                       if (eligibleReturners.length > 0) {
                           const remainingQueens = activeQueens();
@@ -2715,8 +2735,8 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                       const eligibleReturners = state.queens.filter(q =>
                           q.eliminated &&
                           !Object.values(q.history).includes("QUIT") &&
-                          !Object.values(q.history).includes("DISQ") &&
-                          !Object.values(q.history).includes("DEPT")
+                          !hadDisq(q) &&
+                          !hadDept(q)
                       );
                       if (eligibleReturners.length > 0) {
                           ed.isChooseReturn = true;
@@ -3932,7 +3952,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                   dq.record.ELIM += 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  dq.history[state.episodeNumber - 1] = "DEPT";
+                  dq.history[state.episodeNumber - 1] = getQueenOriginalPlacement(dq, data.placements) + "|DEPT";
                   data.elimination = { isDept: true, deptQueen: dq };
               // DISQ: disqualified queen departs — no one from BTM2 goes home
               } else if (data.isDisq) {
@@ -3940,7 +3960,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                   dq.record.ELIM = (dq.record.ELIM || 0) + 1;
                   dq.eliminated = true;
                   dq.elimOrder = state.episodeNumber;
-                  dq.history[state.episodeNumber - 1] = "DISQ";
+                  dq.history[state.episodeNumber - 1] = getQueenOriginalPlacement(dq, data.placements) + "|DISQ";
                   // Both bottom 2 queens are safe — record BTM2 for both
                   const w = data.lipSync.winner.queen;
                   const l = data.lipSync.loser.queen;
@@ -4601,7 +4621,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
 
           // Miss Congeniality & Guest — all eliminated non-DISQ non-finalist queens attend the finale
           const finalistIds4 = new Set(finalists.map(q => q.id));
-          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const misConPool4 = state.queens.filter(q => !finalistIds4.has(q.id) && !hadDisq(q));
           const missCon4 = misConPool4.length > 0 ? pick(misConPool4) : null;
           misConPool4.forEach(q => { q.history[epIndex] = (missCon4 && q.id === missCon4.id) ? "MISS CON" : "GUEST"; });
           
@@ -4622,7 +4642,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
 
           // Miss Congeniality & Guest
           const finalistIds3 = new Set(finalists.map(q => q.id));
-          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !Object.values(q.history).includes("DISQ"));
+          const misConPool3 = state.queens.filter(q => !finalistIds3.has(q.id) && !hadDisq(q));
           const missCon3 = misConPool3.length > 0 ? pick(misConPool3) : null;
           misConPool3.forEach(q => { q.history[epIndex] = (missCon3 && q.id === missCon3.id) ? "MISS CON" : "GUEST"; });
 
@@ -4876,7 +4896,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
       } else if (state.finaleFormat === "top4") {
           if (f.step === 1) {
             // Finale intro
-            const allFinaleQueens = state.queens.filter(q => !Object.values(q.history).includes("DISQ"));
+            const allFinaleQueens = state.queens.filter(q => !hadDisq(q));
             content = `
               <div class="section-card flex-col-center">
                 <div class="label-row"><span class="pill">Grand Finale</span></div>
