@@ -2125,8 +2125,7 @@
       state.seasonFormat = el.seasonFormatSelect.value;
       state.finaleFormat = el.finaleFormatSelect ? el.finaleFormatSelect.value : "top4";
       state.premiereFormat = el.premiereFormatSelect.value;
-      // CA6 Premiere is a placeholder — fall back to regular behaviour until implemented
-      if (state.premiereFormat === "ca6-premiere") state.premiereFormat = "regular";
+      // CA6 Premiere — fully implemented below in prepareEpisode and renderEpisode
       state.lalaPaRuzaEnabled = document.getElementById("lalaPaRuzaToggle").checked;
       state.deptEnabled = document.getElementById("deptToggle").checked;
       state.disqEnabled = document.getElementById("disqToggle").checked;
@@ -2362,7 +2361,43 @@ if (state.seasonFormat === "tournament-of-all-stars") {
 }
 
 
-if (state.seasonFormat === "beaver" && n >= 6) {
+// ── CA6 PREMIERE ──────────────────────────────────────────────────────────────
+      if (state.seasonFormat === "beaver" && state.episodeNumber === 1 && state.premiereFormat === "ca6-premiere") {
+        const maxi = { name: "Rumix", type: "Performance" };
+        state.usedMaxis.push(maxi.name);
+        const mini = { none: true };
+        const scores = actives.map(q => ({
+          queen: q,
+          score: rand(1, 10) + q.stats.performance * rand(0.8, 1.5) + rand(-1, 1)
+        })).sort((a, b) => b.score - a.score);
+
+        // Top 5 queens are the highs; highest scorer wins
+        const ca6Tops = scores.slice(0, Math.min(5, n)).map(s => s.queen);
+        const ca6Winner = ca6Tops[0];
+        const ca6OtherTops = ca6Tops.slice(1);
+        const ca6Safes = scores.slice(Math.min(5, n)).map(s => s.queen);
+
+        // Lip sync vs Brook Lyne Hytes — just for funsies, no real winner
+        const brook = { name: "Brook Lyne Hytes", image: "brooke_lynn_hytes_lipsync.webp", isBrook: true };
+        const brookLipEvent = rollLipEvent();
+        const winnerLipEvent = rollLipEvent();
+        const ca6LipSync = {
+          song: pick(lipSongs),
+          performances: [
+            { queen: ca6Winner, event: winnerLipEvent },
+            { queen: brook, event: brookLipEvent }
+          ]
+        };
+
+        state.episodeData = {
+          mini, maxi, scores, ca6Tops, ca6Winner, ca6OtherTops, ca6Safes, ca6LipSync, brook,
+          countsApplied: false, elimination: null,
+          isCA6Premiere: true
+        };
+        return;
+      }
+
+      if (state.seasonFormat === "beaver" && n >= 6) {
         const mini = getMiniChallenge(state.episodeNumber, n);
         if (!mini.none) {
           mini.winners = [pick(actives)];
@@ -3160,6 +3195,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
       if (data.isChooseReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isQuit) {
           totalScreens = 10;
       }
+      if (data.isCA6Premiere) totalScreens = 10;
       el.screenCounterText.textContent = "";
 
       // Always ensure Next button is visible at start of render (tie-breaker phase will re-hide it)
@@ -3171,7 +3207,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
       // doesn't need to re-derive it from the restored (unshifted) phase.
       {
         let _rigType = null;
-        if (!data.isTournamentBracket && !data.isReturn && !data.isVoteReturn && !data.isChooseReturn) {
+        if (!data.isTournamentBracket && !data.isReturn && !data.isVoteReturn && !data.isChooseReturn && !data.isCA6Premiere) {
           if (data.isBeaverEpisode) {
             // Beaver: judging (results reveal) and lip sync phases vary by episode type.
             // state.phase here is already intro-shifted for ep1.
@@ -3251,6 +3287,18 @@ if (state.seasonFormat === "beaver" && n >= 6) {
           else if (state.phase === 8) phaseTag = "choose_return_pick";
           else if (state.phase === 9) phaseTag = "return_reveal";
           else if (state.phase === 10) phaseTag = 7;
+      }
+      if (data.isCA6Premiere) {
+        if (state.phase === 1) phaseTag = "ca6_alert";
+        else if (state.phase === 2) phaseTag = "ca6_announce";
+        else if (state.phase === 3) phaseTag = "ca6_rules";
+        else if (state.phase === 4) phaseTag = "ca6_performances";
+        else if (state.phase === 5) phaseTag = "ca6_tops";
+        else if (state.phase === 6) phaseTag = "ca6_winner";
+        else if (state.phase === 7) phaseTag = "ca6_brook";
+        else if (state.phase === 8) phaseTag = "ca6_lipsync";
+        else if (state.phase === 9) phaseTag = "ca6_result";
+        else if (state.phase === 10) phaseTag = 7;
       }
       if (data.isBeaverEpisode) {
         const _bPremiere = (state.episodeNumber === 1);
@@ -4521,6 +4569,150 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                 </div>
               </div>
             `;
+          } else if (phaseTag === "ca6_alert") {
+            content = `
+              <div class="section-card flex-col-center" style="padding: 48px 24px;">
+                <div class="label-row"><span class="pill" style="background:#ff3c3c;color:#fff;border-color:#ff3c3c;font-size:14px;letter-spacing:.06em;">⚠ ALERT ⚠</span></div>
+                <p class="big-message" style="color:var(--danger); font-size: clamp(24px, 4vw, 40px); margin-top: 20px;">She done already done had herses!</p>
+                <p class="muted" style="max-width:480px; text-align:center; margin-top: 12px;">All queens, report to the main stage immediately.</p>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_announce") {
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill">Welcome to the Main Stage</span></div>
+                <p class="big-message" style="margin-top: 16px;">Welcome, queens!</p>
+                <p class="muted" style="max-width:520px; text-align:center; margin-bottom: 20px;">This week's maxi challenge is...</p>
+                <div class="placement-card bg-win" style="font-size: 26px; padding: 20px 40px; margin: 8px 0;">Rumix</div>
+                <p class="muted" style="margin-top: 16px; max-width:480px; text-align:center;">Lip sync, dance, and perform to a specially crafted remix. Show us what you've got, ladies!</p>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_rules") {
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill">Special Announcement</span></div>
+                <p class="big-message" style="margin-top: 16px;">Now, before you go...</p>
+                <div style="max-width: 560px; text-align: center;">
+                  <p class="muted">I have a very special announcement. <strong>No one is going home tonight!</strong></p>
+                  <p class="muted" style="margin-top: 10px;">The <strong>5 queens</strong> who shine brightest in the Rumix will be in the top. The <strong>winner</strong> of the week will earn the incredible honour of lip syncing against an amazing lip sync assassin — the one and only <strong>Brook Lyne Hytes</strong>!</p>
+                  <p class="muted" style="margin-top: 16px; font-style: italic;">You may all leave the stage and return to the werk room. Good luck, and don't f*ck it up!</p>
+                </div>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_performances") {
+            // Show performance scores broken into groups
+            const ca6Slayed = data.ca6Tops;
+            const ca6Okay = data.ca6Safes;
+            content = `
+              <div class="section-card">
+                <div class="label-row"><span class="pill">Maxi Challenge</span></div>
+                <p class="big-message">Rumix</p>
+                <p class="muted" style="margin-bottom: 20px;">The queens hit the stage and gave us everything...</p>
+                <div class="flex-col-center">
+                  ${ca6Slayed.length ? `
+                  <div class="group-row">
+                    <p class="muted">Had a standout performance!</p>
+                    <div class="flex-center">${ca6Slayed.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
+                  </div>` : ""}
+                  ${ca6Okay.length ? `
+                  <div class="group-row" style="border:none;">
+                    <p class="muted">Had a solid performance.</p>
+                    <div class="flex-center">${ca6Okay.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
+                  </div>` : ""}
+                </div>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_tops") {
+            content = `
+              <div class="section-card">
+                <div class="label-row"><span class="pill">Judging!</span></div>
+                <p class="muted" style="margin-bottom: 16px;">Based on tonight's performances...</p>
+                <div class="flex-col-center">
+                  <div class="group-row">
+                    <div class="flex-center">${data.ca6Tops.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
+                    <p class="muted">You are the top 5 queens of the week. You'll be critiqued and a winner will be chosen.</p>
+                  </div>
+                  ${data.ca6Safes.length ? `
+                  <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:10px 0;">
+                  <div class="flex-center">
+                    ${data.ca6Safes.map(q => `<span class="placement-card small bg-safe">${escapeHtml(q.name)}</span>`).join("")}
+                  </div>
+                  <p class="muted">You are safe.</p>` : ""}
+                </div>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_winner") {
+            // Apply track record counts here (only once)
+            if (!data.countsApplied) {
+              const epIndex = state.episodeNumber - 1;
+              data.ca6Winner.record.WIN += 1; data.ca6Winner.history[epIndex] = "WIN";
+              data.ca6OtherTops.forEach(q => { q.record.HIGH += 1; q.history[epIndex] = "HIGH"; });
+              data.ca6Safes.forEach(q => { q.record.SAFE += 1; q.history[epIndex] = "SAFE"; });
+              data.countsApplied = true;
+            }
+            content = `
+              <div class="section-card">
+                <div class="label-row"><span class="pill">The Winner of the Week</span></div>
+                <p class="muted" style="margin-bottom: 16px;">Ladies, I've made my decision...</p>
+                <div class="flex-col-center">
+                  <div class="group-row">
+                    <div class="flex-center">
+                      <div class="placement-card bg-win" style="font-size: 18px; padding: 16px 32px;">
+                        ${data.ca6Winner.image ? `<img class="pc-img" src="${escapeHtml(data.ca6Winner.image)}" onerror="this.style.display='none'">` : ""}
+                        ${escapeHtml(data.ca6Winner.name)}
+                      </div>
+                    </div>
+                    <p class="muted">Condragulations — you are the winner of this week's Rumix! As your prize, you will have the honour of lip syncing against the legendary Brook Lyne Hytes!</p>
+                  </div>
+                  ${data.ca6OtherTops.length ? `
+                  <div class="group-row" style="border:none;">
+                    <div class="flex-center">${data.ca6OtherTops.map(q => `<div class="placement-card bg-high">${escapeHtml(q.name)}</div>`).join("")}</div>
+                    <p class="muted">Well done this week — you are also in the top!</p>
+                  </div>` : ""}
+                </div>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_brook") {
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill" style="background:linear-gradient(135deg,#a78bfa,#60a5fa);color:#fff;border:none;">Lip Sync Assassin</span></div>
+                <p class="big-message" style="margin-top: 16px;">Please welcome…</p>
+                <div style="margin: 20px 0; text-align: center;">
+                  <img src="brooke_lynn_hytes_lipsync.webp" alt="Brook Lyne Hytes" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #a78bfa; box-shadow: 0 8px 32px rgba(167,139,250,0.35); display: block; margin: 0 auto 16px;" onerror="this.style.display='none'">
+                  <p class="big-message" style="color: #7c3aed; margin: 0;">Brook Lyne Hytes!</p>
+                </div>
+                <p class="muted" style="max-width: 480px; text-align: center;">The legendary queen has graced us with her presence. <strong>${escapeHtml(data.ca6Winner.name)}</strong>, you will now lip sync against one of the greatest lip syncers to ever walk the main stage. No pressure!</p>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_lipsync") {
+            content = `
+              <div class="section-card">
+                <div class="label-row"><span class="pill">Lip Sync for the Glory!</span></div>
+                <p class="muted">This one's just for the love of the art. Let's see what you've both got!</p>
+                <p class="big-message" style="margin: 16px 0;">${escapeHtml(data.ca6LipSync.song)}</p>
+                <div class="flex-center" style="align-items: stretch; gap: 16px;">
+                  ${data.ca6LipSync.performances.map(p => `
+                    <div style="text-align:center; width: 160px; display: flex; flex-direction: column;">
+                      ${p.queen.image ? `<img src="${escapeHtml(p.queen.image)}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid ${p.queen.isBrook ? '#a78bfa' : 'var(--lime)'};margin:0 auto 8px;display:block;" onerror="this.style.display='none'">` : ""}
+                      <div class="placement-card bg-safe" style="flex: 1;">${escapeHtml(p.queen.name)}</div>
+                      <p class="muted" style="margin-top:6px; font-size:13px;">${p.event.text}</p>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            `;
+          } else if (phaseTag === "ca6_result") {
+            content = `
+              <div class="section-card flex-col-center">
+                <div class="label-row"><span class="pill" style="background:linear-gradient(135deg,#a78bfa,#60a5fa);color:#fff;border:none;">The Verdict</span></div>
+                <p class="big-message" style="margin-top: 16px;">That lip sync was just for funsies!</p>
+                <p class="muted" style="max-width: 500px; text-align: center; margin-top: 8px;">No winner will be declared — this was simply a gift for us all to witness greatness. <strong>${escapeHtml(data.ca6Winner.name)}</strong>, consider this your reward for an incredible week. The track record will reflect your WIN.</p>
+                <div class="flex-center" style="margin-top: 20px; gap: 16px;">
+                  <div class="placement-card bg-win" style="font-size: 16px;">${escapeHtml(data.ca6Winner.name)} — WIN</div>
+                  <div class="placement-card bg-guest" style="font-size: 16px;">Brook Lyne Hytes — Guest</div>
+                </div>
+              </div>
+            `;
           } else if (phaseTag === 7) {
             let sortedQueens = [...state.queens].sort((a, b) => {
               if (b.elimOrder !== a.elimOrder) return b.elimOrder - a.elimOrder;
@@ -4656,6 +4848,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
         else if (_btPremiere) totalPhases = 9;
         else totalPhases = 8;
       }
+      if (state.episodeData.isCA6Premiere) totalPhases = 10;
       // Premiere intro screens add 2 phases to episode 1 for eligible formats
       if (showsPremiereIntro()) totalPhases += 2;
   }
@@ -5827,7 +6020,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
       } else if (format === "beaver") {
         premiereSelect.innerHTML = `
           <option value="regular">Regular Premiere</option>
-          <option value="ca6-premiere">CA6 Premiere (Placeholder)</option>
+          <option value="ca6-premiere">CA6 Premiere (Rumix + Brook Lyne Hytes)</option>
         `;
         premiereSection.classList.remove("hidden");
         finaleSection.classList.remove("hidden");
