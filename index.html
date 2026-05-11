@@ -3091,20 +3091,38 @@ if (state.seasonFormat === "beaver" && n >= 6) {
       el.nextPhaseBtn.classList.remove("hidden");
       
       // Rig Button Toggle Logic
-      // Rig Button Toggle Logic
-      el.rigGameBtn.classList.toggle("hidden",
-          data.isBeaverEpisode ||
-          data.isTournamentBracket ||
-          (isGG && state.phase !== 4 && state.phase !== 6) ||
-          (data.isLaLaPaRuza && state.phase !== 6) ||
-          (isAssassin && state.phase !== 3 && state.phase !== 6) ||
-          (data.isTournamentMerge && state.phase !== 4 && state.phase !== 6) ||
-          (data.isQuit && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && state.phase !== 3 && state.phase !== 6) ||
-          (data.isReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && !data.isQuit) ||
-          (data.isVoteReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && !data.isQuit) ||
-          (data.isChooseReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && !data.isQuit) ||
-          (!data.isQuit && !data.isReturn && !data.isVoteReturn && !data.isChooseReturn && !isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge && state.phase !== 3 && state.phase !== 5)
-      );
+      // Uses the intro-shifted state.phase so phase checks work correctly on ep1 too.
+      // The resolved rig type is stored in state._currentRigType so the click handler
+      // doesn't need to re-derive it from the restored (unshifted) phase.
+      {
+        let _rigType = null;
+        if (!data.isTournamentBracket && !data.isReturn && !data.isVoteReturn && !data.isChooseReturn) {
+          if (data.isBeaverEpisode) {
+            // Beaver: judging (results reveal) and lip sync phases vary by episode type.
+            // state.phase here is already intro-shifted for ep1.
+            const _bPrem = (state.episodeNumber === 1);
+            const _bLv   = data.isBeaverLeaving;
+            const _bJP   = (!_bPrem && !_bLv) ? 4 : (!_bPrem && _bLv) ? 5 : (_bPrem && !_bLv) ? 5 : 6;
+            const _bLP   = (!_bPrem && !_bLv) ? 6 : (!_bPrem && _bLv) ? 6 : (_bPrem && !_bLv) ? 7 : 8;
+            if (state.phase === _bJP) _rigType = "ep3_beaver";
+            else if (state.phase === _bLP) _rigType = "ep5";
+          } else {
+            const _isJudge = (isGG && state.phase === 4) ||
+                             (data.isTournamentMerge && state.phase === 4) ||
+                             (!isGG && !data.isLaLaPaRuza && !data.isTournamentMerge && state.phase === 3);
+            const _isLS    = (isGG && state.phase === 6) ||
+                             (data.isLaLaPaRuza && state.phase === 6) ||
+                             (isAssassin && state.phase === 6) ||
+                             (data.isTournamentMerge && state.phase === 6) ||
+                             (!isGG && !data.isLaLaPaRuza && !isAssassin && !data.isTournamentMerge &&
+                              ((data.isQuit && state.phase === 6) || (!data.isQuit && state.phase === 5)));
+            if (_isJudge) _rigType = "ep3";
+            else if (_isLS) _rigType = "ep5";
+          }
+        }
+        state._currentRigType = _rigType;
+        el.rigGameBtn.classList.toggle("hidden", _rigType === null);
+      }
       
       // Phase Translator mapping specifically to handle Girl Group shifts and Assassin shifts
       let phaseTag = state.phase;
@@ -5260,16 +5278,23 @@ if (state.seasonFormat === "beaver" && n >= 6) {
     // --- RIGGORY SYSTEM LOGIC --- //
     // --- RIGGORY SYSTEM LOGIC --- //
     el.rigGameBtn.addEventListener("click", () => {
+        // Use the rig type computed during renderEpisode (with intro-shifted phase),
+        // so this works correctly on ep1 and in Beaver format.
+        const rt = state._currentRigType;
+        if (!rt) return;
+
         const p = state.episodeData.placements;
         let isTop2Format = (state.seasonFormat === "all-stars-legacy" || (state.episodeNumber === 1 && state.premiereFormat === "top2") || state.episodeData.isMidSeasonNonElim);
         let isTop1Format = state.seasonFormat === "all-stars-assassin";
         let html = "";
         const isGG = state.episodeData.isGirlGroup;
         const isLaLa = state.episodeData.isLaLaPaRuza;
-        const isMerge = state.episodeData.isTournamentMerge; // Add this variable
+        const isMerge = state.episodeData.isTournamentMerge;
+        // Beaver judging rig: show winner picker but NOT the save-low picker
+        const isBeaverJudging = (rt === "ep3_beaver");
 
-        // Update the Phase 3 / Phase 4 Judging checks
-        if ((isGG && state.phase === 4) || (isMerge && state.phase === 4) || (!isGG && !isLaLa && !isMerge && state.phase === 3) || (isTop1Format && state.phase === 3)) {
+        // Judging panel (ep3 or ep3_beaver)
+        if (rt === "ep3" || rt === "ep3_beaver") {
             let tops = isTop2Format ? [...p.topTwo, ...p.highQueens] : (isTop1Format ? [...p.topOne, ...p.highQueens] : [...p.winners, ...p.highQueens]);
             let bottoms = p.bottomThree ? [...p.bottomThree] : [...(p.savedLow ? [p.savedLow] : []), ...(p.bottomTwo || [])];
 
@@ -5299,10 +5324,11 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                 }
             }
 
-            // Show saved-low picker only when there are actual bottoms and it's an elimination episode
+            // Show saved-low picker only when there are actual bottoms, it's an elimination episode,
+            // and NOT a Beaver episode (the winner decides who to save there).
             const isTop2Premiere = state.episodeNumber === 1 && state.premiereFormat === "top2";
             const isNoElimPremiere = state.episodeNumber === 1 && state.premiereFormat === "no-elim";
-            const hasBottoms = bottoms.length >= 3 && !state.episodeData.isMidSeasonNonElim && !isTop2Premiere && !isNoElimPremiere;
+            const hasBottoms = bottoms.length >= 3 && !state.episodeData.isMidSeasonNonElim && !isTop2Premiere && !isNoElimPremiere && !isBeaverJudging;
             let bottomHtml = "";
             if (hasBottoms) {
                 let btmOptions = bottoms.map(q =>
@@ -5312,16 +5338,14 @@ if (state.seasonFormat === "beaver" && n >= 6) {
             }
 
             html = winnerHtml + bottomHtml;
-            el.rigModal.dataset.rigType = "ep3";
+            el.rigModal.dataset.rigType = rt; // preserve "ep3" or "ep3_beaver"
             el.rigContent.innerHTML = html;
             el.rigModal.classList.remove("hidden");
 
-        // Update the Phase 5 / Phase 6 Lip Sync checks
-        } else if ((isGG && state.phase === 6) || (isLaLa && state.phase === 6) || (isTop1Format && state.phase === 6) || (isMerge && state.phase === 6) || (!isGG && !isLaLa && !isTop1Format && !isMerge && state.phase === 5)) {
+        // Lip Sync panel (ep5)
+        } else if (rt === "ep5") {
             let p1, p2;
             let canDoubleSashay = false;
-            
-            // ... (Keep the rest of the Lip Sync rigging code inside here exactly the same) ...
             let isTop2LipSyncTrigger = false;
             
             if (isLaLa) {
@@ -5336,7 +5360,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                 p1 = state.episodeData.lipSync.performances[0].queen;
                 p2 = state.episodeData.lipSync.performances[1].queen;
                 isTop2LipSyncTrigger = state.seasonFormat === "all-stars-legacy" || state.episodeData.isMidSeasonNonElim || (state.episodeNumber === 1 && state.premiereFormat === "top2");
-                canDoubleSashay = activeQueens().length > (state.finaleFormat === "top3" ? 4 : 5);
+                canDoubleSashay = !state.episodeData.isBeaverEpisode && activeQueens().length > (state.finaleFormat === "top3" ? 4 : 5);
             }
             
             html = `
@@ -5344,7 +5368,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                     <select id="rigLipSync">
                         <option value="w1">${escapeHtml(p1.name)} Wins</option>
                         <option value="w2">${escapeHtml(p2.name)} Wins</option>
-                        ${!isTop2LipSyncTrigger && state.seasonFormat !== "tournament-of-all-stars" ? `<option value="double_shantay">Double Shantay</option>` : ''}
+                        ${!isTop2LipSyncTrigger && state.seasonFormat !== "tournament-of-all-stars" && !state.episodeData.isBeaverEpisode ? `<option value="double_shantay">Double Shantay</option>` : ''}
                         ${!isTop2LipSyncTrigger && canDoubleSashay && state.seasonFormat !== "tournament-of-all-stars" ? `<option value="double_sashay">Double Sashay</option>` : ''}
                     </select>
                 </label>
@@ -5447,7 +5471,7 @@ if (state.seasonFormat === "beaver" && n >= 6) {
     el.saveRigBtn.addEventListener("click", () => {
         const rt = el.rigModal.dataset.rigType;
         
-        if (rt === "ep3") {
+        if (rt === "ep3" || rt === "ep3_beaver") {
             const p = state.episodeData.placements;
             let isTop2Format = (state.seasonFormat === "all-stars-legacy" || (state.episodeNumber === 1 && state.premiereFormat === "top2") || state.episodeData.isMidSeasonNonElim);
             let isTop1Format = state.seasonFormat === "all-stars-assassin";
@@ -5513,6 +5537,19 @@ if (state.seasonFormat === "beaver" && n >= 6) {
                     state.episodeData.lsaData.tieBreakerNeeded = false;
                 }
                 state.episodeData.elimination = null;
+            }
+            // For Beaver: directly apply the rig to data.lipSync so beaver_elim reads the correct winner
+            if (state.episodeData.isBeaverEpisode && state.episodeData.lipSync) {
+                const _bEv1 = state.episodeData.lipSync.performances[0];
+                const _bEv2 = state.episodeData.lipSync.performances[1];
+                if (rigVal === "w1") {
+                    state.episodeData.lipSync.winner = { queen: _bEv1.queen, event: _bEv1.event };
+                    state.episodeData.lipSync.loser  = { queen: _bEv2.queen, event: _bEv2.event };
+                } else if (rigVal === "w2") {
+                    state.episodeData.lipSync.winner = { queen: _bEv2.queen, event: _bEv2.event };
+                    state.episodeData.lipSync.loser  = { queen: _bEv1.queen, event: _bEv1.event };
+                }
+                state.episodeData.beaverBtm3Applied = false;
             }
             el.rigModal.classList.add("hidden");
             alert("Outcome locked! Click Next to see results.");
