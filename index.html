@@ -4596,18 +4596,16 @@ if (state.seasonFormat === "tournament-of-all-stars") {
               </div>
             `;
           } else if (phaseTag === "ca6_performances") {
-            // Split all queens into 5 tiers from best to worst based on score
+            // Split all queens into 4 tiers from best to worst based on score
             const _ca6n = data.scores.length;
-            const _t1end = Math.max(1, Math.round(_ca6n * 0.20));
-            const _t2end = Math.max(_t1end + 1, Math.round(_ca6n * 0.40));
-            const _t3end = Math.max(_t2end + 1, Math.round(_ca6n * 0.60));
-            const _t4end = Math.max(_t3end + 1, Math.round(_ca6n * 0.80));
+            const _t1end = Math.max(1, Math.round(_ca6n * 0.25));
+            const _t2end = Math.max(_t1end + 1, Math.round(_ca6n * 0.50));
+            const _t3end = Math.max(_t2end + 1, Math.round(_ca6n * 0.75));
             const _ca6tiers = [
-              { queens: data.scores.slice(0, _t1end).map(s => s.queen),          label: "Gave an incredible performance!", css: "bg-win" },
-              { queens: data.scores.slice(_t1end, _t2end).map(s => s.queen),     label: "Had a great performance!",         css: "bg-high" },
-              { queens: data.scores.slice(_t2end, _t3end).map(s => s.queen),     label: "Had a decent performance.",        css: "bg-safe" },
-              { queens: data.scores.slice(_t3end, _t4end).map(s => s.queen),     label: "Had a bit of a rough time.",       css: "bg-low" },
-              { queens: data.scores.slice(_t4end).map(s => s.queen),             label: "Really struggled on the stage.",   css: "bg-btm" }
+              { queens: data.scores.slice(0, _t1end).map(s => s.queen),      label: "Gave an incredible performance!", css: "bg-safe" },
+              { queens: data.scores.slice(_t1end, _t2end).map(s => s.queen), label: "Had a great performance!",         css: "bg-safe" },
+              { queens: data.scores.slice(_t2end, _t3end).map(s => s.queen), label: "Had a decent performance.",        css: "bg-safe" },
+              { queens: data.scores.slice(_t3end).map(s => s.queen),         label: "Really struggled on the stage.",   css: "bg-safe" }
             ].filter(t => t.queens.length > 0);
             const _lastIdx = _ca6tiers.length - 1;
             content = `
