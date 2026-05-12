@@ -2374,8 +2374,9 @@ if (state.seasonFormat === "tournament-of-all-stars") {
         // Top 5 queens are the highs; highest scorer wins
         const ca6Tops = scores.slice(0, Math.min(5, n)).map(s => s.queen);
         const ca6Winner = ca6Tops[0];
-        const ca6OtherTops = ca6Tops.slice(1);
-        const ca6Safes = scores.slice(Math.min(5, n)).map(s => s.queen);
+        const ca6OtherTops = ca6Tops.slice(1).sort(() => Math.random() - 0.5);
+        const ca6Safes = scores.slice(Math.min(5, n)).map(s => s.queen).sort(() => Math.random() - 0.5);
+        const ca6TopsShuffled = [...ca6Tops].sort(() => Math.random() - 0.5);
 
         // Lip sync vs Brooke Lynn Hytes — just for funsies, no real winner
         const brook = { name: "Brooke Lynn Hytes", image: "brooke_lynn_hytes_lipsync.webp", isBrook: true };
@@ -2390,7 +2391,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
         };
 
         state.episodeData = {
-          mini, maxi, scores, ca6Tops, ca6Winner, ca6OtherTops, ca6Safes, ca6LipSync, brook,
+          mini, maxi, scores, ca6Tops, ca6TopsShuffled, ca6Winner, ca6OtherTops, ca6Safes, ca6LipSync, brook,
           countsApplied: false, elimination: null,
           isCA6Premiere: true
         };
@@ -4602,10 +4603,10 @@ if (state.seasonFormat === "tournament-of-all-stars") {
             const _t2end = Math.max(_t1end + 1, Math.round(_ca6n * 0.50));
             const _t3end = Math.max(_t2end + 1, Math.round(_ca6n * 0.75));
             const _ca6tiers = [
-              { queens: data.scores.slice(0, _t1end).map(s => s.queen),      label: "Gave an incredible performance!", css: "bg-safe" },
-              { queens: data.scores.slice(_t1end, _t2end).map(s => s.queen), label: "Had a great performance!",         css: "bg-safe" },
-              { queens: data.scores.slice(_t2end, _t3end).map(s => s.queen), label: "Had a decent performance.",        css: "bg-safe" },
-              { queens: data.scores.slice(_t3end).map(s => s.queen),         label: "Really struggled on the stage.",   css: "bg-safe" }
+              { queens: data.scores.slice(0, _t1end).map(s => s.queen).sort(() => Math.random() - 0.5),      label: "Gave an incredible performance!", css: "bg-safe" },
+              { queens: data.scores.slice(_t1end, _t2end).map(s => s.queen).sort(() => Math.random() - 0.5), label: "Had a great performance!",         css: "bg-safe" },
+              { queens: data.scores.slice(_t2end, _t3end).map(s => s.queen).sort(() => Math.random() - 0.5), label: "Had a decent performance.",        css: "bg-safe" },
+              { queens: data.scores.slice(_t3end).map(s => s.queen).sort(() => Math.random() - 0.5),         label: "Really struggled on the stage.",   css: "bg-safe" }
             ].filter(t => t.queens.length > 0);
             const _lastIdx = _ca6tiers.length - 1;
             content = `
@@ -4629,7 +4630,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
                 <p class="muted" style="margin-bottom: 16px;">Based on tonight's performances...</p>
                 <div class="flex-col-center">
                   <div class="group-row">
-                    <div class="flex-center">${data.ca6Tops.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
+                    <div class="flex-center">${data.ca6TopsShuffled.map(q => `<div class="placement-card bg-safe">${escapeHtml(q.name)}</div>`).join("")}</div>
                     <p class="muted">You are the top 5 queens of the week. You'll be critiqued and a winner will be chosen.</p>
                   </div>
                   ${data.ca6Safes.length ? `
