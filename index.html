@@ -3214,7 +3214,7 @@ if (state.seasonFormat === "tournament-of-all-stars") {
             // state.phase here is already intro-shifted for ep1.
             const _bPrem = (state.episodeNumber === 1) || (state.premiereFormat === "ca6-premiere" && state.episodeNumber === 2);
             const _bLv   = data.isBeaverLeaving;
-            const _bJP   = (!_bPrem && !_bLv) ? 4 : (!_bPrem && _bLv) ? 5 : (_bPrem && !_bLv) ? 5 : 6;
+            const _bJP   = (!_bPrem && !_bLv) ? 3 : (!_bPrem && _bLv) ? 3 : (_bPrem && !_bLv) ? 4 : 5;
             const _bLP   = (!_bPrem && !_bLv) ? 6 : (!_bPrem && _bLv) ? 6 : (_bPrem && !_bLv) ? 7 : 8;
             if (state.phase === _bJP) _rigType = "ep3_beaver";
             else if (state.phase === _bLP) _rigType = "ep5";
